@@ -1,0 +1,8 @@
+---
+ansible_ssh_user: "admin"
+
+ansible_ssh_host: "52.38.245.146"
+bigip: "52.38.245.146"
+bigip_user: "demo"
+bigip_port: "8443"
+validate_certs: "false" 

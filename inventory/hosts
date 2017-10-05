@@ -1,0 +1,14 @@
+---
+
+localhost ansible_python_interpreter=/home/vagrant/ansible-venv/bin/python
+
+[bigips]
+bigip
+
+[analyticshosts]
+analytics.example.com
+
+
+
+
+

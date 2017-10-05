@@ -1,0 +1,217 @@
+{
+    "tables": [
+        {
+            "name": "basic__snatpool_members"
+        },
+        {
+            "name": "net__snatpool_members"
+        },
+        {
+            "name": "optimizations__hosts"
+        },
+        {
+            "columnNames": [
+                "name"
+            ],
+            "name": "pool__hosts",
+            "rows": [
+                {
+                    "row": [
+                        "{{service}}"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "pool__members",
+            "columnNames": [
+                "addr",
+                "port",
+                "connection_limit"
+            ],
+            "rows": [
+                {
+                    "row": [
+                        "/{{partition}}/{{node_fqdn}}",
+                        "80",
+                        "0"
+                    ]
+                }
+            ]
+        },        
+        {
+            "name": "server_pools__servers"
+        }
+    ],
+    "variables": [
+        {
+            "encrypted": "no",
+            "name": "pool__addr",
+            "value": "{{vip_address}}"
+        },
+        {
+            "encrypted": "no",
+            "name": "asm__language",
+            "value": "utf-8"
+        },
+        {
+            "encrypted": "no",
+            "name": "asm__use_asm",
+            "value": "/{{partition}}/{{ltm_policy_name}}"
+        },
+        {
+            "encrypted": "no",
+            "name": "client__http_compression",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "client__standard_caching_without_wa",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "client__tcp_wan_opt",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "monitor__monitor",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "monitor__response",
+            "encrypted": "no",
+            "value": "200"
+        },
+        {
+            "encrypted": "no",
+            "name": "monitor__uri",
+            "value": "/"
+        },
+        {
+            "encrypted": "no",
+            "name": "net__client_mode",
+            "value": "wan"
+        },
+        {
+            "encrypted": "no",
+            "name": "net__route_to_bigip",
+            "value": "no"
+        },
+        {
+            "encrypted": "no",
+            "name": "net__same_subnet",
+            "value": "no"
+        },
+        {
+            "encrypted": "no",
+            "name": "net__server_mode",
+            "value": "lan"
+        },
+        {
+            "encrypted": "no",
+            "name": "net__snat_type",
+            "value": "automap"
+        },
+        {
+            "encrypted": "no",
+            "name": "net__vlan_mode",
+            "value": "all"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__http",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__mask"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__persist",
+            "value": "/#cookie#"
+        },
+        {
+            "name": "pool__pool_to_use",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__port_secure",
+            "value": "443"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__redirect_to_https",
+            "value": "no"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__xff",
+            "value": "yes"
+        },
+        {
+            "encrypted": "no",
+            "name": "server__ntlm",
+            "value": "/#do_not_use#"
+        },
+        {
+            "encrypted": "no",
+            "name": "server__oneconnect",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "server__tcp_lan_opt",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "server__tcp_req_queueing",
+            "value": "no"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl__cert",
+            "value": "/{{partition}}/{{client_ssl_cert_name}}.crt"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl__client_ssl_profile",
+            "value": "/#create_new#"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl__key",
+            "value": "/{{partition}}/{{client_ssl_cert_name}}.key"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl__mode",
+            "value": "client_ssl"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl__use_chain_cert",
+            "value": "/#do_not_use#"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl_encryption_questions__advanced",
+            "value": "yes"
+        },
+        {
+            "encrypted": "no",
+            "name": "ssl_encryption_questions__help",
+            "value": "hide"
+        },
+        {
+            "encrypted": "no",
+            "name": "stats__request_logging",
+            "value": "/{{partition}}/request-log"
+        }
+    ]
+}

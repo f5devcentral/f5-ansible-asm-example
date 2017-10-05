@@ -1,0 +1,67 @@
+---
+ansible_python_interpreter: /usr/bin/env python
+
+# Most automation via REST so don't want default ansible_connection: ssh
+# ansible_connection: local
+
+bigip_port: "443"
+bigip_partition: "Common"
+validate_certs: "no"
+
+# BIG-IP Global Deployment Variables
+license_server: "activate.f5.com"
+
+# Misc LICENSE EULA Variables
+email: "icontrol@f5example.com"
+firstName: "example"
+lastName: "iControl"
+companyName: "F5"
+phone: "2062725555"
+jobTitle: "demo"
+address: "111 EXAMPLE ICONTROL RD"
+city: "Seattle"
+stateProvince: "WA"
+postalCode: "98119"
+country: "United States"
+license_string: ""
+eula_string: ""
+local_license_file_name: ""
+local_eula_file_name: ""
+
+# DEVICE CERTIFICATE VARIABLES: #
+cert_email: "cert-admin@example.com"
+cert_country: "US"
+cert_state: "WA"
+cert_locality: "Seattle"
+cert_organization: "Demo"
+cert_division: "Demo"
+cert_expire: 3650
+
+# Set Provision Level
+provision:
+    - module: ltm
+      level: nominal
+
+# mcpd:
+#    audit: "enable"
+#    loglevel: "notice"
+
+dns_search:
+    - example.com
+    - lab.local
+
+##### SSH VARIABLES #####
+ssh:
+    #[[allow, banner, banner_text, inactivity_timeout, include, login, loglevel]]
+    allow: "{ALL}"
+    banner: "false"
+    banner_text: ""
+    inactivity_timeout: "3600"
+    login: "true"
+    loglevel: "VERBOSE"
+    include: "PasswordAuthentication yes"
+
+
+
+
+

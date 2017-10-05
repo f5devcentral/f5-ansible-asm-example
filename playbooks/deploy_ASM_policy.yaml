@@ -1,0 +1,29 @@
+---
+
+# Ensure deployment specific directory exists
+- hosts: bigips
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: create directory for environment/deployment
+      file: path=../cache/{{env_tag}} state=directory
+
+#### DEPLOY ASM POLICY
+
+- hosts: bigips
+  connection: local
+  gather_facts: False
+  environment:
+      F5_SERVER: "{{ ansible_ssh_host }}"
+      F5_USER: "{{ bigip_user }}"
+      F5_PASSWORD: "{{ bigip_password }}"
+      F5_SERVER_PORT: "{{ bigip_port }}"
+      F5_VALIDATE_CERTS: "{{ validate_certs }}"
+  roles:
+    - bigip_base_asm
+  post_tasks:
+    - name: Save the running BIG-IP configuration to disk
+      delegate_to: localhost
+      bigip_config:
+        save: True
+      register: result
