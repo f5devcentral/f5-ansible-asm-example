@@ -15,11 +15,11 @@ to using ansible.
 ## Requirements
 
 
-ansible==2.4.0 
-f5-sdk==3.0.3
-boto==2.46.1
-boto3==1.4.4
-botocore==1.5.30
+- ansible==2.4.0 
+- f5-sdk==3.0.3
+- boto==2.46.1
+- boto3==1.4.4
+- botocore==1.5.30
 
 
 ## Environment Setup
