@@ -71,8 +71,8 @@ WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-I
 
 ex.
 ```
-cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__demo1 cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__\<deploymentName\> 
-``
+cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__demo1 cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__<deploymentName> 
+```
 
 and modify any playbooks to use that group name instead. 
 
