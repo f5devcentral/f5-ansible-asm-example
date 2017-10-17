@@ -53,7 +53,7 @@
   pre_tasks:
     - name: Grab App Pool Member Info
       set_fact:
-          app_stack: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/' + serviceName + '-app-cft-output.yaml') | from_yaml }}"
+          app_stack: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/' + service_name + '-app-cft-output.yaml') | from_yaml }}"
     - name: Grab App Autoscale Group 2
       set_fact:
           applicationPoolTagValue: "{{ app_stack['stack_outputs']['appAutoscaleGroupName'] }}"

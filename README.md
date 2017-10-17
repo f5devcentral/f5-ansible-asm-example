@@ -64,10 +64,10 @@ https://github.com/F5Networks/f5-aws-cloudformation
 
 ### Deploy New AWS  Stack
 ```
-ansible-playbook -i inventory/hosts playbooks/deploy_aws_stack.yaml -e "deploymentName=demo1 service_name=service1"
+ansible-playbook -i inventory/hosts playbooks/deploy_aws_stack.yaml -e "deploymentName=demo1 service_name=demo1"
 ```
 
-WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-IP's API host addresses and uses the default host/group naming convention. By default, the cloudformation template will tag the instances with deploymentName. If you use a different deploymentName, you will need to create another group with those aws defaults 
+WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-IP's API host addresses and uses the default host/group naming convention. By default, the cloudformation template will tag the instances with deploymentName. If you use a different deploymentName, you will need to create another group based on the new tag.
 
 ex.
 ```
@@ -96,39 +96,35 @@ ansible-playbook -i inventory/ec2.py playbooks/backup_autoscale_bigip.yaml -e "d
 
 #### bigip_iApp_1 = A simple HTTP service
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1"
 ```
 
-#### bigip_iApp_2 = An advanced HTTPS service with WAF, irules, policies, etc. Requires ASM + AVR to be provisioned.
+#### bigip_iApp_2 = An advanced HTTPS service with WAF, irules, policies, etc. 
+*Warning: Requires AVR + ASM to be provisioned*
 
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1 node_fqdn=www.example.com"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1 node_fqdn=internal-demo1-AppElb-1373821132.us-west-2.elb.amazonaws.com"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com"
 ```
 
 #### bigip_iApp_3 = An HTTP service with WAF and fqdn pool
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-AppElb-1373821132.us-west-2.elb.amazonaws.com asm_policy_name=linux-low"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com asm_policy_name=linux-low"
 
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-AppElb-1373821132.us-west-2.elb.amazonaws.com asm_policy_name=linux-high"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com asm_policy_name=linux-high"
 ```
 
 #### bigip_iApp_4 = = An HTTP service with WAF and service discovery iApp for discovering pool members by tags. AWS deployments only.
 
-```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1"
-```
-
-or setting variables manually
 
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1 applicationPoolTagKey=aws:autoscaling:groupName applicationPoolTagValue=demo1-application-appAutoscaleGroup-P6D04COZCE1W"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 applicationPoolTagKey=aws:autoscaling:groupName applicationPoolTagValue=demo1-demo1-application-appAutoscaleGroup-1WL86R38ZV303"
 ```
 
 #### bigip_iApp_5 = A simple HTTP service using Services iApp:
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-AppElb-1373821132.us-west-2.elb.amazonaws.com"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com"
 ```
 
 
@@ -161,5 +157,5 @@ ansible-playbook -vvvv -i inventory/ec2.py playbooks/teardown_service_aws.yaml -
 
 ### Teardown AWS Stack:
 ```
-ansible-playbook -i inventory/hosts playbooks/teardown_aws_stack.yaml -e "deploymentName=demo1 service_name=service1"
+ansible-playbook -i inventory/hosts playbooks/teardown_aws_stack.yaml -e "deploymentName=demo1 service_name=demo1"
 ```
