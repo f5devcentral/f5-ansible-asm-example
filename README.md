@@ -14,12 +14,17 @@ to using ansible.
 
 ## Requirements
 
+Software:
 
 - ansible==2.4.0 
 - f5-sdk==3.0.3
 - boto==2.46.1
 - boto3==1.4.4
 - botocore==1.5.30
+
+
+See included requirements.txt for full environment used.
+
 
 
 ## Environment Setup
@@ -43,10 +48,16 @@ points to local copy of https://github.com/f5networks/f5-ansible development bra
 Tested with Commit: 4e4a9c94f9ba2d311236509e5dedb27fb1691212
 
 
-3) If deploying stacks in AWS, edit your credentials file ~/.aws/credentials
+3) If deploying stacks in AWS, configure boto credentials file ~/.aws/credentials
 
 See link below for more detail:
 http://boto3.readthedocs.io/en/latest/guide/configuration.html
+
+This user will need permission to create cloudformation stacks with IAM roles.
+
+For more information, see
+
+https://github.com/F5Networks/f5-aws-cloudformation
 
 
 ## Examples
@@ -67,7 +78,7 @@ ansible-playbook -i inventory/ec2.py playbooks/backup_autoscale_bigip.yaml -e "d
 ```
 
 ### Deploy just an iApp Service on a BIG-IP:
-*Uncomment one the bigip_iApp role you would like to deploy in playbooks/deploy_iApp.yaml. See the description in each role's tasks/main.yaml*
+*Uncomment one bigip_iApp_X role you would like to deploy in playbooks/deploy_iApp.yaml. See the description in each role's tasks/main.yaml*
 
 
 #### bigip_iApp_1 = A simple HTTP service
