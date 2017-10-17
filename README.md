@@ -67,6 +67,16 @@ https://github.com/F5Networks/f5-aws-cloudformation
 ansible-playbook -i inventory/hosts playbooks/deploy_aws_stack.yaml -e "deploymentName=demo1 service_name=service1"
 ```
 
+WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-IP's API host addresses and uses the default host/group naming convention. By default, the cloudformation template will tag the instances with deploymentName. If you use a different deploymentName, you will need to change the playbooks to run on name of that group instead.
+
+ex.
+```
+cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__demo1 cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__\<deploymentName\> 
+``
+
+and modify any playbooks to use that group name instead. 
+
+
 ### Onboard - Create REST Username & Password
 ```
 ansible-playbook -i inventory/ec2.py playbooks/onboard_bigip_aws.yaml -e "deploymentName=demo1"
@@ -79,6 +89,8 @@ ansible-playbook -i inventory/ec2.py playbooks/backup_autoscale_bigip.yaml -e "d
 
 ### Deploy just an iApp Service on a BIG-IP:
 *Uncomment one bigip_iApp_X role you would like to deploy in playbooks/deploy_iApp.yaml. See the description in each role's tasks/main.yaml*
+
+*If you are deploying in AWS, configure the inventory/host_vars/bigip host file to point to your bigip and set the playbooks to run on "hosts: bigips" instead.*
 
 
 #### bigip_iApp_1 = A simple HTTP service
