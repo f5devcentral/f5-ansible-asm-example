@@ -1,0 +1,22 @@
+---
+
+# Note iApp may reference additional things and may have dependencies....
+- include: advanced.yaml
+  when: iApp_advanced == "True"
+  delegate_to: localhost
+
+
+- name: Teardown iApp Service
+  delegate_to: localhost
+  bigip_iapp_service:
+      name: "{{ iApp_service_name }}"
+      state: absent
+  register: result
+
+
+- name: Teardown Service Discovery iApp
+  delegate_to: localhost
+  bigip_iapp_service:
+      name: "{{ iApp_service_name }}_sd"
+      state: absent
+  register: result

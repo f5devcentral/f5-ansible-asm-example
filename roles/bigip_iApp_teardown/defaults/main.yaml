@@ -1,0 +1,35 @@
+---
+
+
+service: "www.demo.f5example.com"
+service_name: "www_demo_f5example_com"
+
+
+client_ssl_cert_name: "default"
+
+# If Advanced
+iApp_advanced: "False"
+deployment_type: "lb_and_waf"
+deploy_analytics: "true"
+
+ltm_policy_name: "ltm_policy_w_asm_policy"
+logging_profile_name: "asm_log_to_splunk"
+analytics_profile_name: "my_analytics_profile"
+
+
+ltm_policy_name: "{{ service_name }}_ltm_policy" 
+asm_policy_name: "linux-high"
+asm_policy_base64: "{{ lookup('file', 'asm-policy-' + asm_policy_name + '.xml') | b64encode }}"
+
+logging_profile_name: "asm_log_to_splunk"
+analytics_profile_name: "my_analytics_profile"
+AnalyticsServerIP: "172.16.11.34"
+AnalyticsServerPort: "515"
+
+# Pool Vars
+applicationPoolTagKey: "aws:autoscaling:groupName"
+applicationPoolTagValue: "demo1-service1-application-appAutoscaleGroup-J6CION6HARDT"
+
+# iApp Specific variables
+iApp_service_name: "{{ service_name }}"
+sd_iApp_service_name: "{{ service_name }}_sd"

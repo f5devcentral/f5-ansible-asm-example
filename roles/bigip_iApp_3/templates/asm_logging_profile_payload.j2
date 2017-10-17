@@ -1,0 +1,44 @@
+{
+    "name": "{{ logging_profile_name }}",
+    "application": [
+        {
+            "name": "{{ logging_profile_name }}",
+            "facility": "local0",
+            "filter": [
+                {
+                    "name": "protocol",
+                    "values": [
+                        "all"
+                    ]
+                },
+                {
+                    "name": "request-type",
+                    "values": [
+                        "all"
+                    ]
+                },
+                {
+                    "name": "search-all"
+                }
+            ],
+            "format": {
+                "fieldDelimiter": ",",
+                "type": "predefined"
+            },
+            "guaranteeLogging": "disabled",
+            "guaranteeResponseLogging": "disabled",
+            "localStorage": "disabled",
+            "logicOperation": "or",
+            "maximumEntryLength": "2k",
+            "maximumHeaderSize": "any",
+            "maximumQuerySize": "any",
+            "maximumRequestSize": "any",
+            "partition": "Common",
+            "protocol": "tcp",
+            "remoteStorage": "splunk",
+            "reportAnomalies": "disabled",
+            "responseLogging": "none",
+            "servers": [ "{{AnalyticsServerIP}}:{{AnalyticsServerPort}}" ]
+        }
+    ]
+}

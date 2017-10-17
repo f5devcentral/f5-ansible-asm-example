@@ -1,0 +1,9 @@
+deploymentName: "{{deploymentName}}"
+serviceName: "{{service_name}}"
+vpc: "{{vpc}}"
+applicationSubnets: "{{applicationSubnets}}"
+instanceType: "{{appInstanceType}}"
+sshKey: "{{sshKey}}"
+restrictedSrcAddress: "{{restrictedSrcAddress}}"
+
+

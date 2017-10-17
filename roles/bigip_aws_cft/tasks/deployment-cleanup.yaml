@@ -1,0 +1,26 @@
+
+# BIG-IP Template sometimes creates dependent artifacts that will prevent stack from deleting
+- name: Grab Output from Previous Stack Deployment
+  set_fact: 
+    bigip_stack_outputs: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/bigip-cft-output.yaml') | from_yaml }}"
+  when: cft_state == "absent"
+
+- name: Delete any artifacts template creates before tearing down stack
+  shell: "python {{ install_path }}/roles/bigip_aws_cft/files/autoscale-deployment-cleanup.py --region {{aws_region}} --autoscale_group {{bigip_stack_outputs.stack_outputs.bigipAutoscaleGroup}} --s3bucket {{bigip_stack_outputs.stack_outputs.s3Bucket}}"
+  when: cft_state == "absent" and bigip_stack_outputs.stack_outputs is defined
+
+# Misc Cleanup Use Case for Failed Tests
+- name: delete stacks in 'rollback_complete' from previous executions
+  shell: "python {{ install_path }}/bin/get_cfn_stack_state.py {{ aws_region }} {{deploymentName}}-bigip"
+  register: initial_cfn_state
+
+- name: Teardown previous stack if necessary
+  cloudformation:
+    stack_name="{{deploymentName}}-bigip"
+    state=absent
+    region="{{ aws_region }}"
+    template="{{ install_path }}/roles/bigip_aws_cft/files/{{ cft_file_name }}"
+  when: initial_cfn_state.stdout == "ROLLBACK_COMPLETE"
+
+
+

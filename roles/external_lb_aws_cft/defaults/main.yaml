@@ -1,0 +1,30 @@
+---
+cft_state: "present"
+
+# These fields limited to small length (20 and 10 respectively)
+# because used in creating object names which have small limits
+deploymentName: example
+service_name: service1
+poolPort: "80"
+
+
+aws_region: "us-west-2"
+# if existing stack
+vpc: vpc-2bbaf34e
+subnets: "subnet-b2441ad7,subnet-93db4dca"
+restrictedSrcAddress: 0.0.0.0/0
+
+# Key Name as seen in AWS
+sshKey: YourSshKey
+
+# OPTIONAL (in some sandwich deployments)
+# ssl certificate id used if ELB terminating SSL
+# ex. CertificateId: arn:aws:iam::111111111111:server-certificate/f5example-cert
+# arn:aws:iam::452013943082:server-certificate/f5example-cert
+# CertificateId: <certificate id>
+certificateId: arn:aws:iam::452013943082:server-certificate/f5example-cert
+
+
+cft_name: "external-elb"
+cft_file_name: "{{ cft_name + '.template' }}"
+cft_parameters_template_name: "{{ cft_name + '-parameters.yaml' }}"

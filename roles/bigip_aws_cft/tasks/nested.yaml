@@ -1,0 +1,23 @@
+## Import variables if deployed in nested
+
+- name: Set Network paramaters if deployed as a nested stack with network stack
+  set_fact:
+    vpc: "{{ deploy_net_stack_results.stack_outputs.vpc }}"
+    subnets: "{{ deploy_net_stack_results.stack_outputs.subnets }}"
+  when: deploy_net_stack_results is defined
+
+- name: Set External LB Paramaters if deployed as a nested stack with external LB stack
+  set_fact:
+    bigipElasticLoadBalancer: "{{ deploy_external_lb_stack_results.stack_outputs.bigipElasticLoadBalancer }}"
+  when: deploy_external_lb_stack_results is defined
+
+# - name: Set Application Pool Paramaters if deployed as a nested stack with app stack
+#   set_fact:
+#     aappInternalDnsName: "{{ deploy_app_stack_results.stack_outputs.appInternalDnsName }}"
+#   when: deploy_app_stack_results is defined
+
+- name: Set Application Pool Paramaters if deployed as a nested stack with app stack
+  set_fact:
+    applicationPoolTagValue: "{{ deploy_app_stack_results.stack_outputs.appAutoscaleGroupName }}"
+  when: deploy_app_stack_results is defined
+

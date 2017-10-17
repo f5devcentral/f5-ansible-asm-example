@@ -1,0 +1,21 @@
+---
+cft_state: "present"
+
+deploymentName: example
+
+aws_region: "us-west-2"
+availabilityZones: "us-west-2b,us-west-2c"
+restrictedSrcAddress: 0.0.0.0/0
+
+# Key Name as seen in AWS
+sshKey: YourSshKey
+
+tag_costcenter: f5costcenter
+tag_group: f5group
+tag_owner: f5owner
+tag_application: f5app
+tag_environment: f5env
+
+cft_name: "network"
+cft_file_name: "{{ cft_name + '.template' }}"
+cft_parameters_template_name: "{{ cft_name + '-parameters.yaml' }}"

@@ -1,0 +1,48 @@
+---
+## Some initial setup for big ip once we can login.  
+
+- name:  Wait for ssh port to open
+  local_action: wait_for host={{ ansible_ssh_host }} search_regex=OpenSSH delay=10 port=22
+
+- name: Wait until BIG-IP is ready to make changes
+  raw: "run /util bash -c 'cat /var/prompt/ps1'"
+  until: (result.stdout.find("Active") != -1 or result.stdout.find("Standby") != -1 or result.stdout.find("Unlicensed") != -1)
+  register: result
+  retries: 60
+
+# We may also need a user for REST API calls.  We may also want the default shell
+## to be bash, rather than tmsh.  The latter is difficult to use ansible...
+
+- include: add_rest_user.yml
+# - include: modify_admin.yml
+
+
+# Below only useful if know the password already and are doing something disruptive post deploy.
+- name: Poll BIG-IP failover.linksup
+  delegate_to: localhost
+  uri:
+    url: "https://{{ ansible_ssh_host }}:{{bigip_port}}/mgmt/tm/sys/db/failover.linksup"
+    status_code: 200
+    timeout: 300
+    user: "{{ bigip_user }}"
+    password: "{{ bigip_password }}"
+    validate_certs: "{{ validate_certs }}"
+    return_content: yes
+  until: bigip_failover_linksup.status == 200 and bigip_failover_linksup.json.value == 'true'
+  retries: 20
+  delay: 10
+  register: bigip_failover_linksup
+  tags: bigip_ready
+
+
+# TODO: add a timeout.
+# Raw command to support older BIG-IP without json
+# - name: Wait for MCPD ready
+#   raw: |
+#     bigstart_wait mcpd ready
+#     while ! tmsh show sys mcp-state field-fmt | grep -qE 'phase.+running' || pidof -x mprov.pl >/dev/null 2>&1; do sleep 1; done
+#     if [[ ! $(getdb Provision.CPU.asm) == 0 ]]; then perl -MF5::ASMReady -e '$|++; do {print "waiting for asm...\n"; sleep(1)} while !F5::ASMReady::is_asm_ready()'; fi
+#   args:
+#     executable: /bin/bash
+#   register: mcpd_ready_result
+#   tags: bigip_ready

@@ -1,0 +1,57 @@
+---
+# iAPP VARS
+# SERVICE VARS
+service: "www.demo.f5example.com"
+service_name: "www_demo_f5example_com"
+partition: "Common"
+strict_updates: false
+
+# Dicatates iApp Payload from template
+deployment_type: "lb_and_waf"
+deploy_analytics: "true"
+
+# Vip
+vip_address: "0.0.0.0/0"
+vip_port: "80"
+
+## SSL CERT 
+client_ssl_cert_name: "{{ service_name }}"
+#client_ssl_cert_name: "default"
+
+image_background: "{{ lookup('file', 'image_background_base_64') }}"
+image_sorry: "{{ lookup('file', 'image_sorry_base_64') }}"
+irule_sorry_page: "{{ lookup('file', 'irule_sorry_page.tcl') }}"
+irule_demo_analytics: "{{ lookup('file', 'irule_demo_analytics.tcl') }}"
+irule_random_snat: "{{ lookup('file', 'irule_random_snat.tcl') }}"
+
+ltm_policy_name: "{{ service_name }}_ltm_policy" 
+asm_policy_name: "linux-high"
+asm_policy_base64: "{{ lookup('file', 'asm-policy-' + asm_policy_name + '.xml') | b64encode }}"
+
+
+analytics_profile_name: "my_analytics_profile"
+AnalyticsServerIP: "172.16.11.34"
+AnalyticsServerPort: "515"
+logging_profile_name: "asm_log_to_splunk"
+syslog_pool_name: "syslog_pool" #Hard coded in iRule
+lb_method: "round_robin"
+slow_ramp_time: "120"
+monitors: [ "/Common/tcp" ]
+syslog_pool_members: 
+    - host: "172.16.11.34"
+      port: "514"
+
+# DNS Pool Vars
+node_fqdn: "www.example.com"
+
+
+# iApp Specific variables
+iApp_service_name: "{{ service_name }}"
+# TEMPLATE NAME:
+iApp_template_name: "f5.http.v1.2.0rc7"
+# TEMPLATE TYPE
+iApp_template_type: "https_vip_w_waf"
+# iApp_template_type: "https_vip_w_waf"
+
+jinja_template_name: "{{ iApp_template_type + '_' + iApp_template_name + '.j2' }}"
+

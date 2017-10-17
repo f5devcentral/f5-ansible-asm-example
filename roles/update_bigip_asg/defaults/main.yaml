@@ -1,0 +1,5 @@
+aws_region: us-west-2
+
+bigipAutoscaleGroup: demo1-bigip-BigipAutoscaleGroup-NKV1SWV3ZQ5L
+lb: demo1-service2-BigipElb
+action: present

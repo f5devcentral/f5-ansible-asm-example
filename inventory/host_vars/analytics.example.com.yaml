@@ -1,3 +1,5 @@
 ---
-ansible_ssh_host: 10.0.3.2
-AnalyticsServerInstancePrivateIp: 10.0.3.2
+ansible_ssh_user: ec2-user
+ansible_ssh_host: 34.215.171.22
+AnalyticsServerInstancePublicIp: 34.215.171.22
+AnalyticsServerInstancePrivateIp: 172.16.11.34

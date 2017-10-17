@@ -1,0 +1,26 @@
+---
+# This playbook launches cloudformation templates to create a complete reference environment
+
+# Ensure deployment specific directory exists
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: create directory for environment/deployment
+      file: path=../state_cache/{{deploymentName}} state=directory
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  pre_tasks:
+    - name: Set cft state to present
+      set_fact:
+          cft_state: "present"
+          sshKey: "{{aws_ssh_key_name}}"  #Inherit from vault
+  roles:
+    - net_aws_cft
+    - app_aws_cft 
+    - external_lb_aws_cft
+    - bigip_aws_cft
+
+

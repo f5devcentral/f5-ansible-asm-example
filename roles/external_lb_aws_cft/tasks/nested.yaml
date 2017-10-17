@@ -1,0 +1,5 @@
+- name: Set Paramaters if deployed as a nested stack
+  set_fact:
+    vpc: "{{ deploy_net_stack_results.stack_outputs.vpc }}"
+    subnets: "{{ deploy_net_stack_results.stack_outputs.subnets }}"
+  when: deploy_net_stack_results is defined

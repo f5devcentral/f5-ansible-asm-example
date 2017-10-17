@@ -6,7 +6,7 @@ ansible_python_interpreter: /usr/bin/env python
 
 bigip_port: "443"
 bigip_partition: "Common"
-validate_certs: "no"
+validate_certs: "false"
 
 # BIG-IP Global Deployment Variables
 license_server: "activate.f5.com"

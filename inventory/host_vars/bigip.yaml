@@ -1,9 +1,11 @@
 ---
+# Static Inventory Example
 ansible_ssh_user: "admin"
+bigip_rest_user: "demo"
 
-ansible_ssh_host: "52.38.245.146"
-bigip: "52.38.245.146"
-bigip_user: "demo"
-# bigip_password: "secret" # inherit from inventory/group_vars/all/vars.yaml instead
+#ansible_ssh_host: "34.214.72.232"
+ansible_ssh_host: 34.208.81.42
+bigip: 34.208.81.42
 bigip_port: "8443"
-validate_certs: "false" 
+
+

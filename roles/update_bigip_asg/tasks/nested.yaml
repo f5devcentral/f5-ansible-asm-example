@@ -1,0 +1,4 @@
+- name: Set Paramaters if deployed as a nested stack
+  set_fact:
+    lb: "{{ deploy_external_lb_stack_results.stack_outputs.bigipElasticLoadBalancer }}"
+  when: deploy_external_lb_stack_results is defined

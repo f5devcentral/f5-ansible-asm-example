@@ -1,0 +1,18 @@
+---
+# See deploy_aws_stack
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  pre_tasks:
+    - name: Set cft state to absent
+      set_fact:
+          cft_state: "absent"
+  roles:
+    - bigip_aws_cft
+    - external_lb_aws_cft
+    - app_aws_cft
+    - net_aws_cft
+
+
+

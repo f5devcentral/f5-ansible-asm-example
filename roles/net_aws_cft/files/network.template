@@ -1,0 +1,279 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template deploys common EC2/VPC resources which will be used by the other templates.  In particular, this template creates a VPC, subnets, a routing table, common security groups, load balancers, etc.",
+  "Parameters": {
+    "deploymentName" : {
+      "Description" : "Deployment Name - used for creating objects",
+      "Type" : "String",
+      "MaxLength": 20,
+      "Default": "Autoscale"
+    },    
+    "availabilityZones": {
+      "Description" : "Names of 2 Availability Zones in this Region",
+      "Type": "List<AWS::EC2::AvailabilityZone::Name>",
+      "Default": "[us-east-1b,us-east-1c]"
+    },   
+    "restrictedSrcAddress" : {
+      "Description" : " The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    }
+  },
+  "Resources": {
+    "vpc": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AWS::StackName"
+          },
+          {
+            "Key": "application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "internetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "internetGatewayAttachment": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        },
+        "InternetGatewayId": {
+          "Ref": "internetGateway"
+        }
+      }
+    },
+    "az1ExternalSubnet" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "vpc" },
+        "CidrBlock" : "10.0.1.0/24",
+        "AvailabilityZone" :  { "Fn::Select": [
+              "0", { "Ref": "availabilityZones" }
+          ]
+        },
+        "Tags" : [ 
+          { "Key" : "Name", "Value" : "AZ1 External Subnet" },
+          { "Key" : "application", "Value" : { "Ref" : "AWS::StackId"} }
+        ]
+      }
+    },
+    "az2ExternalSubnet" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "vpc" },
+        "CidrBlock" : "10.0.11.0/24",
+        "AvailabilityZone" :  { "Fn::Select": [
+              "1", { "Ref": "availabilityZones" }
+          ]
+        },
+        "Tags" : [ 
+          { "Key" : "Name", "Value" : "AZ2 External Subnet" },
+          { "Key" : "application", "Value" : { "Ref" : "AWS::StackId"} }
+        ]
+      }
+    },
+    "az1ApplicationSubnet" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "vpc" },
+        "CidrBlock" : "10.0.3.0/24",
+        "AvailabilityZone" : { "Fn::Select": [
+              "0", { "Ref": "availabilityZones" }
+          ]
+        },
+        "Tags" : [ 
+          { "Key" : "Name", "Value" : "AZ1 Application Subnet" },
+          { "Key" : "application", "Value" : { "Ref" : "AWS::StackId"} }
+        ]
+      }
+    },
+    "az2ApplicationSubnet" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "vpc" },
+        "CidrBlock" : "10.0.13.0/24",
+        "AvailabilityZone" : { "Fn::Select": [
+              "1", { "Ref": "availabilityZones" }
+          ]
+        },
+        "Tags" : [ 
+          { "Key" : "Name", "Value" : "AZ2 Application Subnet" },
+          { "Key" : "application", "Value" : { "Ref" : "AWS::StackId"} }
+        ]
+      }
+    },
+    "externalRouteTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : { "Ref" : "vpc"},
+        "Tags" : [
+          { "Key" : "Name", "Value" : "External Route Table" },
+          { "Key" : "application", "Value" : { "Ref" : "AWS::StackName" } }, 
+          { "Key" : "Network", "Value" : "External" }
+        ]
+      }
+    },
+    "applicationRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        },
+        "Tags": [
+          {
+            "Key": "application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "externalInternetRoute": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "internetGatewayAttachment",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "externalRouteTable"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "internetGateway"
+        }
+      }
+    },
+    "applicationInternetRoute": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "internetGatewayAttachment",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "applicationRouteTable"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "internetGateway"
+        }
+      }
+    },
+    "az1ExternalSubnetRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "az1ExternalSubnet" },
+        "RouteTableId" : { "Ref" : "externalRouteTable" }
+      }
+    },
+    "az2ExternalSubnetRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "az2ExternalSubnet" },
+        "RouteTableId" : { "Ref" : "externalRouteTable" }
+      }
+    },
+    "az1ApplicationSubnetRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "az1ApplicationSubnet" },
+        "RouteTableId" : { "Ref" : "applicationRouteTable" }
+      }
+    },
+    "az2ApplicationSubnetRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "az2ApplicationSubnet" },
+        "RouteTableId" : { "Ref" : "applicationRouteTable" }
+      }
+    }
+  },
+  "Outputs": {
+    "vpc": {
+      "Description": "Id of VPC",
+      "Value": {
+        "Ref": "vpc"
+      }
+    },
+    "availabilityZones": {
+      "Description": "availabilityZones",
+      "Value": { "Fn::Join" : [ ",", { "Ref": "availabilityZones" } ] }
+    },
+    "availabilityZone1": {
+      "Value": {
+        "Fn::GetAtt": [
+          "az1ApplicationSubnet",
+          "AvailabilityZone"
+        ]
+      }
+    },
+    "availabilityZone2": {
+      "Value": {
+        "Fn::GetAtt": [
+          "az2ApplicationSubnet",
+          "AvailabilityZone"
+        ]
+      }
+    },
+    "subnets": {
+      "Description": "External Subnets for Bigip",
+      "Value":  { "Fn::Join": [
+          ",",
+          [
+            { "Ref": "az1ExternalSubnet" },
+            { "Ref": "az2ExternalSubnet" }
+          ]
+        ]
+      }
+    },
+    "az1ExternalSubnet": {
+      "Value": { "Ref": "az1ExternalSubnet" },
+      "Description": "AZ1 Public or External Subnet ID"
+    },
+    "az2ExternalSubnet": {
+      "Value": { "Ref": "az2ExternalSubnet" },
+      "Description": "AZ2 Public or External Subnet ID"
+    },
+    "applicationSubnets": {
+      "Description": "Application Subnets",
+      "Value":  { "Fn::Join": [
+          ",",
+          [
+            { "Ref": "az1ApplicationSubnet" },
+            { "Ref": "az2ApplicationSubnet" }
+          ]
+        ]
+      }
+    },
+    "az1ApplicationSubnet": {
+      "Value": { "Ref": "az1ApplicationSubnet" },
+      "Description": "AZ1 Application Subnet ID"
+    },
+    "az2ApplicationSubnet": {
+      "Value": { "Ref": "az2ApplicationSubnet" },
+      "Description": "AZ2 Application Subnet ID"
+    }
+  }
+}

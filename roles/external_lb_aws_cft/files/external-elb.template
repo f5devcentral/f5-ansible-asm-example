@@ -1,0 +1,208 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template deploys common EC2/VPC resources which will be used by the other templates.  In particular, this template creates a VPC, subnets, a routing table, common security groups, load balancers, etc.",
+  "Parameters": {
+    "deploymentName" : {
+      "Description" : "Deployment Name - used for creating objects. ex. example",
+      "Type" : "String",
+      "MaxLength": 20,
+      "Default": "Autoscale"
+    },
+    "serviceName" : {
+      "Description" : "Service Name - used for creating objects. ex. service1",
+      "Type" : "String",
+      "MaxLength": 10,
+      "Default": "service1"
+    },
+    "poolPort" : {
+      "Description" : "Port used for Service Pool",
+      "Type" : "String",
+      "Default": "80"
+    },
+    "vpc": {
+      "Description": "VPC where you want to deploy the BIG-IP VEs",
+      "Type": "AWS::EC2::VPC::Id"
+    }, 
+    "subnets": {
+      "Description": "Public or external subnet for the availability zones",
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "certificateId" : {
+      "Description" : "Listener Certificate Id",
+      "Type" : "String",
+      "Default": "arn:aws:iam::XXXXXXXXXXXX:server-certificate/example-cert"
+    },      
+    "restrictedSrcAddress" : {
+      "Description" : " The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    }
+  },
+  "Resources": {
+    "externalLBSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        },
+        "GroupDescription": "Enable SSH access via port 22 and enable access to virtual servers on 80 and 443",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+            {
+              "Key": "Name",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "deploymentName"
+                    },
+                    "-",
+                    {
+                      "Ref": "serviceName"
+                    },
+                    " external lb security group"
+                  ]
+                ]
+              }
+            },
+            {
+              "Key": "serviceName",
+              "Value": {
+                "Ref": "serviceName"
+              }
+            }
+        ]
+      }
+    },
+    "bigipElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "LoadBalancerName": {
+          "Fn::Join": [
+            "",
+            [ 
+              { "Ref" : "deploymentName" },
+              "-",
+              { "Ref" : "serviceName" },
+              "-BigipElb"
+            ]
+          ]
+        },
+        "HealthCheck": {
+          "HealthyThreshold": "2",
+          "Interval": "10",
+          "Target": {
+              "Fn::Join": [
+                "",
+                [ 
+                  "HTTP:",
+                  { "Ref" : "poolPort" },
+                  "/"
+                ]
+              ]
+          },
+          "Timeout": "5",
+          "UnhealthyThreshold": "10"
+        },
+        "Subnets" : { "Ref": "subnets" },
+        "CrossZone" : true,
+        "Listeners" : [ {
+            "LoadBalancerPort" : "443",
+            "InstancePort" : { "Ref" : "poolPort" },
+            "Protocol" : "HTTPS",
+            "InstanceProtocol" : "HTTP",
+            "SSLCertificateId" : { "Ref" : "certificateId" },
+            "PolicyNames" : [
+                "ELBSecurityPolicy-2016-08",
+                "MyAppCookieStickinessPolicy"
+            ]
+        } ],
+        "ConnectionDrainingPolicy": {
+          "Enabled": "true",
+          "Timeout": "300"
+        },
+        "Policies" : [
+            {
+                "PolicyName" : "MyAppCookieStickinessPolicy",
+                "PolicyType" : "AppCookieStickinessPolicyType",
+                "Attributes" : [
+                    { "Name" : "CookieName", "Value" : "MyCookie"}
+                ]
+            }
+        ],
+        "SecurityGroups": [
+          {
+            "Ref": "externalLBSecurityGroup"
+          }
+        ],
+        "Tags": [
+            {
+              "Key": "Name",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "deploymentName"
+                    },
+                    "-",
+                    {
+                      "Ref": "serviceName"
+                    },
+                    " external lb"
+                  ]
+                ]
+              }
+            },
+            {
+              "Key": "Application",
+              "Value": {
+                "Ref": "serviceName"
+              }
+            }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "externalLBSecurityGroup": {
+      "Description": "Security Group for external LB of BIG-IP",
+      "Value": {
+        "Ref": "externalLBSecurityGroup"
+      }
+    },
+    "bigipElasticLoadBalancer": {
+      "Description": "Id of ELB Group for all BIG-IPs",
+      "Value": {
+        "Ref": "bigipElasticLoadBalancer"
+      }
+    },
+    "bigipELBDnsName": {
+      "Description": "DNS Name for the ELB Group containing BIG-IP",
+      "Value": {
+        "Fn::GetAtt": [
+          "bigipElasticLoadBalancer",
+          "DNSName"
+        ]
+      }
+    }
+  }
+}

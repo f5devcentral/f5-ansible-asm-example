@@ -1,0 +1,227 @@
+{
+    "kind": "tm:sys:application:service:servicestate",
+    "name": "www_demo_f5example_com",
+    "partition": "Common",
+    "subPath": "www_demo_f5example_com.app",
+    "fullPath": "/Common/www_demo_f5example_com.app/www_demo_f5example_com",
+    "generation": 18774,
+    "selfLink": "https://localhost/mgmt/tm/sys/application/service/~Common~www_demo_f5example_com.app~www_demo_f5example_com?ver=13.0.0",
+    "deviceGroup": "/Common/autoscale-group",
+    "deviceGroupReference": {
+        "link": "https://localhost/mgmt/tm/cm/device-group/~Common~autoscale-group?ver=13.0.0"
+    },
+    "inheritedDevicegroup": "true",
+    "inheritedTrafficGroup": "false",
+    "strictUpdates": "disabled",
+    "template": "/Common/f5.http.v1.2.0rc7",
+    "templateReference": {
+        "link": "https://localhost/mgmt/tm/sys/application/template/~Common~f5.http.v1.2.0rc7?ver=13.0.0"
+    },
+    "templateModified": "no",
+    "trafficGroup": "/Common/traffic-group-1",
+    "trafficGroupReference": {
+        "link": "https://localhost/mgmt/tm/cm/traffic-group/~Common~traffic-group-1?ver=13.0.0"
+    },
+    "lists": [
+        {
+            "name": "asm__security_logging",
+            "encrypted": "no"
+        },
+        {
+            "name": "irules__irules",
+            "encrypted": "no"
+        },
+        {
+            "name": "local_traffic__policies",
+            "encrypted": "no"
+        }
+    ],
+    "tables": [
+        {
+            "name": "basic__snatpool_members"
+        },
+        {
+            "name": "net__snatpool_members"
+        },
+        {
+            "name": "optimizations__hosts"
+        },
+        {
+            "name": "pool__hosts",
+            "columnNames": [
+                "name"
+            ],
+            "rows": [
+                {
+                    "row": [
+                        "www.demo.f5example.com"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "server_pools__servers"
+        }
+    ],
+    "variables": [
+        {
+            "name": "asm__language",
+            "encrypted": "no",
+            "value": "utf-8"
+        },
+        {
+            "name": "asm__use_asm",
+            "encrypted": "no",
+            "value": "/Common/app-ltm-policy"
+        },
+        {
+            "name": "client__http_compression",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "client__standard_caching_without_wa",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "client__tcp_wan_opt",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "monitor__monitor",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "monitor__response",
+            "encrypted": "no",
+            "value": "200"
+        },
+        {
+            "name": "monitor__uri",
+            "encrypted": "no",
+            "value": "/"
+        },
+        {
+            "name": "net__client_mode",
+            "encrypted": "no",
+            "value": "wan"
+        },
+        {
+            "name": "net__route_to_bigip",
+            "encrypted": "no",
+            "value": "no"
+        },
+        {
+            "name": "net__same_subnet",
+            "encrypted": "no",
+            "value": "no"
+        },
+        {
+            "name": "net__server_mode",
+            "encrypted": "no",
+            "value": "lan"
+        },
+        {
+            "name": "net__snat_type",
+            "encrypted": "no",
+            "value": "automap"
+        },
+        {
+            "name": "net__vlan_mode",
+            "encrypted": "no",
+            "value": "all"
+        },
+        {
+            "name": "pool__addr",
+            "encrypted": "no",
+            "value": "0.0.0.0/0"
+        },
+        {
+            "name": "pool__http",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "pool__mask",
+            "encrypted": "no"
+        },
+        {
+            "name": "pool__persist",
+            "encrypted": "no",
+            "value": "/#cookie#"
+        },
+        {
+            "name": "pool__pool_to_use",
+            "encrypted": "no",
+            "value": "/Common/www_demo_f5example_com_service_discovery.app/www_demo_f5example_com_service_discovery_pool"
+        },
+        {
+            "name": "pool__port",
+            "encrypted": "no",
+            "value": "80"
+        },
+        {
+            "name": "pool__port_secure",
+            "encrypted": "no",
+            "value": "443"
+        },
+        {
+            "name": "pool__redirect_to_https",
+            "encrypted": "no",
+            "value": "no"
+        },
+        {
+            "name": "pool__xff",
+            "encrypted": "no",
+            "value": "yes"
+        },
+        {
+            "name": "server__ntlm",
+            "encrypted": "no",
+            "value": "/#do_not_use#"
+        },
+        {
+            "name": "server__oneconnect",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "server__tcp_lan_opt",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "server__tcp_req_queueing",
+            "encrypted": "no",
+            "value": "no"
+        },
+        {
+            "name": "ssl__mode",
+            "encrypted": "no",
+            "value": "no_ssl"
+        },
+        {
+            "name": "ssl__use_chain_cert",
+            "encrypted": "no",
+            "value": "/#do_not_use#"
+        },
+        {
+            "name": "ssl_encryption_questions__advanced",
+            "encrypted": "no",
+            "value": "yes"
+        },
+        {
+            "name": "ssl_encryption_questions__help",
+            "encrypted": "no",
+            "value": "hide"
+        },
+        {
+            "name": "stats__request_logging",
+            "encrypted": "no",
+            "value": "/Common/request-log"
+        }
+    ]
+}

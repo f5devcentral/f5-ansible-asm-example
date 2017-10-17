@@ -1,0 +1,237 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template deploys all components to support the application, with the exception of those related to BIG-IP.  An autoscaling group for the application is created, but we leave the creation of CloudWatch alarms and scaling policies as an exercise for the future. Disclaimer: More realistic application template would take AMI ID as input, with AMI ID being be artifact of a build pipe line.",
+  "Parameters": {
+    "deploymentName" : {
+      "Description" : "Name the template uses to create object names",
+      "Type" : "String",
+      "MaxLength": 20,
+      "Default": "example"
+    },
+    "serviceName" : {
+      "Description" : "Service Name Short- used for creating objects. ex. service1",
+      "Type" : "String",
+      "MaxLength": 10,
+      "Default": "service1"
+    },
+    "vpc": {
+      "Description": "Common VPC for whole deployment",
+      "Type": "AWS::EC2::VPC::Id"
+    },
+    "applicationSubnets": {
+      "Description": "Application Subnet IDs",
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "instanceType": {
+      "AllowedValues": [
+        "t1.micro",
+        "m3.medium",
+        "m3.xlarge",
+        "m2.xlarge",
+        "m3.2xlarge",
+        "c3.large",
+        "c3.xlarge"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type",
+      "Default": "t1.micro",
+      "Description": "App EC2 instance type",
+      "Type": "String"
+    },
+    "sshKey": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "AWS::EC2::KeyPair::KeyName"
+    },
+    "restrictedSrcAddress" : {
+      "Description" : " The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    }
+  },
+  "Mappings": {
+    "imageRegionMap": {
+      "ap-northeast-1": {
+        "AMI": "ami-5b82503a"
+      }, 
+      "ap-southeast-1": {
+        "AMI": "ami-2e67c24d"
+      }, 
+      "ap-southeast-2": {
+        "AMI": "ami-3af5c559"
+      }, 
+      "eu-west-1": {
+        "AMI": "ami-9c5f25ef"
+      }, 
+      "sa-east-1": {
+        "AMI": "ami-6a52c106"
+      }, 
+      "us-east-1": {
+        "AMI": "ami-93fa8284"
+      }, 
+      "us-west-1": {
+        "AMI": "ami-5f1b553f"
+      }, 
+      "us-west-2": {
+        "AMI": "ami-c1e13da1"
+      }
+    }
+  },
+  "Resources": {
+      "appSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        },
+        "GroupDescription": "Enable SSH access via port 22 and enable access to web on 80 and 443",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": { "Ref": "restrictedSrcAddress" }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+            {
+              "Key": "Name",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "deploymentName"
+                    },
+                    "-",
+                    {
+                      "Ref": "serviceName"
+                    },
+                    " app security group"
+                  ]
+                ]
+              }
+            },
+            {
+              "Key": "serviceName",
+              "Value": {
+                "Ref": "serviceName"
+              }
+            }
+        ]
+      }
+    },
+    "appLaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": {
+          "Fn::FindInMap": [
+            "imageRegionMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "AMI"
+          ]
+        },
+        "InstanceType": {
+          "Ref": "instanceType"
+        },
+        "AssociatePublicIpAddress": true,
+        "KeyName": {
+          "Ref": "sshKey"
+        },
+        "SecurityGroups": [
+          {
+            "Ref": "appSecurityGroup"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "\n",
+              [
+                "#cloud-config",
+                "runcmd:",
+                " - sudo docker run --name demo -p 80:80 -d f5devcentral/f5-demo-app:blue"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "appAutoscaleGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "App Autoscale Instance: ", 
+                  {
+                    "Ref": "deploymentName"
+                  },
+                  "-",
+                  {
+                    "Ref": "serviceName"
+                  }
+                ]
+              ]
+            },
+            "PropagateAtLaunch": true
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "serviceName"
+            },
+            "PropagateAtLaunch": true
+          }
+        ],
+        "VPCZoneIdentifier": { "Ref": "applicationSubnets" },
+        "Cooldown": "600",
+        "HealthCheckGracePeriod": 120,
+        "LaunchConfigurationName": {
+          "Ref": "appLaunchConfig"
+        },
+        "MaxSize": "3",
+        "MinSize": "2",
+        "MetricsCollection": [
+          {
+            "Granularity": "1Minute"
+          }
+        ]
+      },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+         "MaxBatchSize": "1", 
+         "MinInstancesInService": "1",
+         "PauseTime": "PT3M"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "appAutoscaleGroupName": {
+      "Value": {
+        "Ref": "appAutoscaleGroup"
+      }
+    }
+  }
+}

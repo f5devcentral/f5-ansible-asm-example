@@ -1,0 +1,328 @@
+{
+    "tables": [
+        {
+          "columnNames": [
+            "CIDRRange"
+          ],
+          "name": "feature__easyL4FirewallBlacklist",
+          "rows": []
+        },
+        {
+          "columnNames": [
+            "CIDRRange"
+          ],
+          "name": "feature__easyL4FirewallSourceList",
+          "rows": [
+            {
+              "row": [
+                "0.0.0.0/0"
+              ]
+            }
+          ]
+        },
+        {
+            "columnNames": [
+                "CaseSensitive",
+                "Condition",
+                "Group",
+                "Missing",
+                "Negate",
+                "Operand",
+                "Value"
+            ],
+            "name": "l7policy__rulesMatch",
+            "rows": [
+                {
+                    "row": [
+                        "no",
+                        "starts-with",
+                        "default",
+                        "no",
+                        "no",
+                        "http-uri/request/path",
+                        "/"
+                    ]
+                }
+            ]
+        },
+        {
+            "columnNames": [
+                "Group", 
+                "Parameter", 
+                "Target"
+            ], 
+            "name": "l7policy__rulesAction", 
+            "rows": [
+                {
+                    "row": [
+                        "default", 
+                        "pool:0", 
+                        "forward/request/select/pool"
+                    ]
+                }
+            ]
+        },
+        {
+            "columnNames": [
+                "Index",
+                "Name",
+                "Type",
+                "Options"
+            ],
+            "name": "monitor__Monitors",
+            "rows": [
+                {
+                    "row": [
+                        "0",
+                        "/Common/http",
+                        "none",
+                        "none"
+                    ]
+                }
+            ]
+        },
+        {
+            "columnNames": [
+                "Index",
+                "IPAddress",
+                "Port",
+                "ConnectionLimit",
+                "Ratio",
+                "PriorityGroup",
+                "State",
+                "AdvOptions"
+            ],
+            "name": "pool__Members",
+            "rows": [
+                {
+                    "row": [
+                        "0",
+                        "{{fqdn_node}}",
+                        "80",
+                        "0",
+                        "1",
+                        "0",
+                        "enabled",
+                        "none"
+                    ]
+                }
+
+            ]
+        },
+        {
+            "columnNames": [
+                "Index",
+                "Name",
+                "Description",
+                "LbMethod",
+                "Monitor",
+                "AdvOptions"
+            ],
+            "name": "pool__Pools",
+            "rows": [
+                {
+                    "row": [
+                        "0",
+                        "",
+                        "",
+                        "round-robin",
+                        "0",
+                        "none"
+                    ]
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "encrypted": "no",
+            "name": "feature__easyL4Firewall",
+            "value": "auto"
+        },
+        {
+            "encrypted": "no",
+            "name": "feature__insertXForwardedFor",
+            "value": "auto"
+        },
+        {
+            "encrypted": "no",
+            "name": "feature__redirectToHTTPS",
+            "value": "disable"
+        },
+        {
+            "encrypted": "no",
+            "name": "feature__securityEnableHSTS",
+            "value": "disabled"
+        },
+        {
+            "encrypted": "no",
+            "name": "feature__sslEasyCipher",
+            "value": "disabled"
+        },
+        {
+            "encrypted": "no",
+            "name": "feature__statsHTTP",
+            "value": "auto"
+        },
+        {
+            "encrypted": "no",
+            "name": "feature__statsTLS",
+            "value": "auto"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__apmDeployMode",
+            "value": "preserve-bypass"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__appStats",
+            "value": "enabled"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__asmDeployMode",
+            "value": "redeploy-block"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__logLevel",
+            "value": "5"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__mode",
+            "value": "auto"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__routeDomain",
+            "value": "auto"
+        },
+        {
+            "encrypted": "no",
+            "name": "iapp__strictUpdates",
+            "value": "enabled"
+        },
+        {
+            "encrypted": "no",
+            "name": "l7policy__defaultASM",
+            "value": "bypass"
+        },
+        {
+            "encrypted": "no",
+            "name": "l7policy__defaultL7DOS",
+            "value": "bypass"
+        },
+        {
+            "encrypted": "no",
+            "name": "l7policy__strategy",
+            "value": "/Common/first-match"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__DefaultPoolIndex",
+            "value": "0"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__MemberDefaultPort",
+            "value": "80"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__addr",
+            "value": "{{ vip_address }}"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__mask",
+            "value": "0.0.0.0"
+        },
+        {
+            "encrypted": "no",
+            "name": "pool__port",
+            "value": "{{vip_port}}"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ConnectionLimit",
+            "value": "0"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__Description",
+            "value": "Standard HTTP Virtual Server with L7 policy"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__IpProtocol",
+            "value": "tcp"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__Name",
+            "value": "www_demo_f5example_com_vs"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__OptionConnectionMirroring",
+            "value": "disabled"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__OptionSourcePort",
+            "value": "preserve"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ProfileClientProtocol",
+            "value": "/Common/tcp-wan-optimized"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ProfileCompression",
+            "value": "/Common/httpcompression"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ProfileDefaultPersist",
+            "value": "/Common/cookie"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ProfileHTTP",
+            "value": "/Common/http"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ProfileSecurityIPBlacklist",
+            "value": "none"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__ProfileServerProtocol",
+            "value": "/Common/tcp-lan-optimized"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__RouteAdv",
+            "value": "always"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__SNATConfig",
+            "value": "automap"
+        },
+        {
+            "encrypted": "no",
+            "name": "vs__SourceAddress",
+            "value": "0.0.0.0/0"
+        },
+        {
+            "name": "vs__AdvOptions",
+            "encrypted": "no",
+            "value": "translate-address=enabled"
+        }
+    ]
+}

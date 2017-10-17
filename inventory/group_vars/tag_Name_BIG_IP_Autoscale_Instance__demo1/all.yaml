@@ -1,0 +1,12 @@
+# Example Group Name created by dynamic inventory file inventory/ec2.py
+# See main readme for examples
+
+ansible_python_interpreter: /usr/bin/env python
+# Most automation via REST so don't want default ansible_connection: ssh
+# ansible_connection: local
+
+# Single Nic Port
+bigip_port: "8443"
+ansible_ssh_user: "admin"
+validate_certs: "false"
+partition: "Common"

@@ -6,21 +6,33 @@
 # Some Globals
 vault_install_path: "/home/vagrant/git/f5-ansible-asm-example"
 
-analytics_addr: "analytics.demo.example.com"
-vault_analytics_key: "XXXXX-XXXXX-XXXXXX-XXXXX-XXXXXXX" 
-
 # NOTE:
 # Pre v11.6, CLI uses root
 # v11.6 and later, AWS AMIs use admin
 
-# Warning: when configuring passwords via bigip_base
+# Warning: when configuring passwords via bigip_base or bigip_base_aws
 # which uses tmsh commands from within bash
-# you can't have a "#" in the password as tmsh will think it's a comment or something
-vault_ansible_ssh_user: "root"
-vault_ansible_ssh_pass: "default"
+# you can't have a "#" in the password as tmsh will think it's a comment
+# vault_ansible_ssh_user: "root"
+# vault_ansible_ssh_pass: "default"
+vault_ansible_ssh_user: "admin"
 
 vault_bigip_user: "admin"
-vault_bigip_password: "admin"
+vault_bigip_password: "StrongPasswordHere"
 
-vault_bigip_rest_user: "admin"
-vault_bigip_rest_password: "admin"
+vault_bigip_rest_user: "restadmin"
+vault_bigip_rest_password: "StrongPasswordHere"
+
+
+# AWS Creds:
+vault_aws_ssh_key: "~/.ssh/YOUR-KEY.pem"
+vault_aws_ssh_key_name: "YOUR-KEY"
+vault_aws_region: "us-west-2"
+
+
+# MISC Template Vars
+vault_on_prem_network: "10.0.0.0/24"
+vault_notificationEmail: "user@example.com"
+
+analytics_addr: "analytics.demo.example.com"
+vault_analytics_key: "XXXXX-XXXXX-XXXXXX-XXXXX-XXXXXXX" 

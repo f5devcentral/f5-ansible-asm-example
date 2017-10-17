@@ -1,0 +1,27 @@
+---
+# iAPP VARS
+# SERVICE VARS
+service: "www.demo.f5example.com"
+service_name: "www_demo_f5example_com"
+partition: "Common"
+strict_updates: false
+
+
+vip_address: "0.0.0.0"
+vip_port: "80"
+
+
+# DNS Pool Vars
+node_fqdn: "www.example.com"
+
+
+# iApp Specific variables
+iApp_service_name: "{{ service_name }}"
+# TEMPLATE NAME:
+iApp_template_name: "appsvcs_integration_v2.0.004"
+# iApp_template_name: "appsvcs_integration_v2.1dev_001"
+# TEMPLATE TYPE
+iApp_template_type: "http_vip"
+# iApp_template_type: "https_vip"
+
+jinja_template_name: "{{ iApp_template_type + '_' + iApp_template_name + '.j2' }}"

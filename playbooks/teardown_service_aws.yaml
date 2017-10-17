@@ -1,0 +1,49 @@
+---
+# See deploy_service_aws
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  pre_tasks:
+    - name: Set cft state to absent
+      set_fact:
+          cft_state: "absent"
+          sshKey: "{{aws_ssh_key_name}}"  #Inherit from vault
+          net_stack: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/net-cft-output.yaml') | from_yaml }}"
+          bigip_stack: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/bigip-cft-output.yaml') | from_yaml }}"
+          external_lb_stack: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/' + service_name + '-external-lb-cft-output.yaml') | from_yaml }}"
+    - name: Set some variables from stack
+      set_fact:
+          vpc: "{{ net_stack['stack_outputs']['vpc'] }}"
+          applicationSubnets: "{{ net_stack['stack_outputs']['applicationSubnets'] }}"
+          subnets: "{{ net_stack['stack_outputs']['subnets'] }}"
+          bigipAutoscaleGroup: "{{ bigip_stack['stack_outputs']['bigipAutoscaleGroup'] }}"
+    - name: Set external LB
+      set_fact:
+          lb: "{{ external_lb_stack['stack_outputs']['bigipElasticLoadBalancer'] }}"
+      when: external_lb_stack.stack_outputs is defined
+  roles:
+    - update_bigip_asg
+    - external_lb_aws_cft
+    - app_aws_cft 
+
+
+# Uses Dynamic Inventory to discover Instance IPs
+# - hosts: bigips
+- hosts: tag_Name_BIG_IP_Autoscale_Instance__demo1[0]
+  connection: local
+  gather_facts: False
+  environment:
+      F5_SERVER: "{{ ansible_ssh_host }}"
+      F5_USER: "{{ bigip_rest_user }}"
+      F5_PASSWORD: "{{ bigip_rest_password }}"  #Inherit from vault
+      F5_SERVER_PORT: "{{ bigip_port }}"
+      F5_VALIDATE_CERTS: "{{ validate_certs }}"
+  roles:
+    - bigip_iApp_teardown
+  post_tasks:
+    - name: Save the running BIG-IP configuration to disk
+      delegate_to: localhost
+      bigip_config:
+        save: True
+      register: result

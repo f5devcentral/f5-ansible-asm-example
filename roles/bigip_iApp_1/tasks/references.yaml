@@ -1,0 +1,9 @@
+
+- name: Add node by their FQDN
+  bigip_node:
+      state: "present"
+      partition: "{{partition}}"
+      fqdn: "{{ node_fqdn }}"
+      name: "{{ node_fqdn }}"
+  delegate_to: localhost
+  register: result

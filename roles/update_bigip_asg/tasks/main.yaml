@@ -1,0 +1,13 @@
+# Import any variables if nested 
+- include: nested.yaml
+  delegate_to: localhost
+
+# https://github.com/boto/boto/issues/3428
+# - name: Modify LB list
+#   ec2_asg:
+#     name: "{{ asg_name }}"
+#     load_balancers: "{{lb_list}}"    
+#     region: "{{aws_region}}"
+
+- name: Delete any artifacts template creates before tearing down stack
+  shell: "python {{ install_path }}/roles/update_bigip_asg/files/update_asg_lb.py --region {{aws_region}} --autoscale_group {{ bigipAutoscaleGroup }} --lbs {{ lb }} --action {{cft_state}}"

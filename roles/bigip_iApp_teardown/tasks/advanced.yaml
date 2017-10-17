@@ -1,0 +1,100 @@
+---
+
+- name: Building REST payload for the analytics server pool
+  template: src="analytics_pool_payload.j2" dest="{{ install_path }}/cache/{{ env_tag }}/pool_payload-{{ vip_id }}.json"
+  delegate_to: localhost
+  #when: deploy_analytics is defined and deploy_analytics == "True"
+
+- name: Deploying/updating High Speed Logging pool to send to Analytics Server
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      port={{ bigip_port }}
+      user={{ bigip_rest_user }}
+      password={{ bigip_rest_password }}
+      collection_path="mgmt/tm/ltm/pool"
+      payload_file="{{ install_path }}/cache/{{ env_tag }}/pool_payload-{{ vip_id }}.json"
+      resource_key="name"
+  #when: deploy_analytics is not defined or deploy_analytics == "True"
+
+- name: Building REST payload for the asm loggging profile to remote analytics server
+  template: src="asm_logging_profile_payload.j2" dest="{{ install_path }}/cache/{{ env_tag }}/asm_logging_profile_payload-{{ vip_id }}.json"
+  delegate_to: localhost
+  when: deployment_type is defined and deployment_type == "lb_and_waf"
+
+- name: Deploying/updating ASM Logging Profile to send to Remote Analytics Server
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      port={{ bigip_port }}
+      user={{ bigip_rest_user }}
+      password={{ bigip_rest_password }}
+      collection_path="mgmt/tm/security/log/profile"
+      payload_file="{{ install_path }}/cache/{{ env_tag }}/asm_logging_profile_payload-{{ vip_id }}.json"
+      resource_key="name"
+  when: deployment_type is defined and deployment_type == "lb_and_waf"
+
+
+- name: Deploying/updating Analytics Profile
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      port={{ bigip_port }}
+      user={{ bigip_rest_user }}
+      password={{ bigip_rest_password }}
+      collection_path="mgmt/tm/ltm/profile/analytics"
+      resource_key="name"
+      payload='{"name":"{{ analytics_profile_name }}","capturedTrafficExternalLogging":"disabled","capturedTrafficInternalLogging":"disabled","collectGeo":"enabled","collectIp":"enabled","collectMaxTpsAndThroughput":"enabled","collectMethods":"enabled","collectPageLoadTime":"enabled","collectResponseCodes":"enabled","collectSubnets":"enabled","collectUrl":"enabled","collectUserAgent":"enabled","collectUserSessions":"enabled","collectedStatsExternalLogging":"disabled","collectedStatsInternalLogging":"enabled","defaultsFrom":"/Common/analytics","notificationByEmail":"disabled","notificationBySnmp":"disabled","notificationBySyslog":"disabled","partition":"Common","publishIruleStatistics":"disabled","sampling":"enabled","sessionCookieSecurity":"ssl-only","sessionTimeoutMinutes":"5"}'
+
+- name: Uploading Datagroup ... background for sorry page
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      port={{ bigip_port }}
+      user={{ bigip_rest_user }}
+      password={{ bigip_rest_password }}
+      collection_path="mgmt/tm/ltm/data-group/internal"
+      resource_key="name"
+      payload='{"name":"background_images","type":"string","records":[{"name":"{{image_background}}"}]}'
+
+- name: Uploading Datagroup ... image for sorry page
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      port={{ bigip_port }}
+      user={{ bigip_rest_user }}
+      password={{ bigip_rest_password }}
+      collection_path="mgmt/tm/ltm/data-group/internal"
+      resource_key="name"
+      payload='{"name":"sorry_images","type":"string","records":[{"name":"{{image_sorry}}"}]}'
+
+- name: Uploading iRules ... sorry_page_rule
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      user={{ bigip_rest_user }}
+      port={{ bigip_port }}
+      password={{ bigip_rest_password }}
+      collection_path='mgmt/tm/ltm/rule'
+      resource_key="name"
+      payload='{"name":"irule_sorry_page","apiAnonymous":"{{irule_sorry_page|replace("\\","\\\\")|replace("\"","\\\"")|replace("\n","\\n")}}"}'
+
+- name: Uploading iRules ... demo_analytics_rule
+  delegate_to: localhost
+  bigip_rest_wrapper:
+      state=absent
+      host={{ ansible_ssh_host }}
+      port={{ bigip_port }}
+      user={{ bigip_rest_user }}
+      password={{ bigip_rest_password }}
+      collection_path="mgmt/tm/ltm/rule"
+      resource_key="name"
+      payload='{"name":"irule_demo_analytics","apiAnonymous":"{{irule_demo_analytics|replace("\\","\\\\")|replace("\"","\\\"")|replace("\n","\\n")}}"}'
+
+

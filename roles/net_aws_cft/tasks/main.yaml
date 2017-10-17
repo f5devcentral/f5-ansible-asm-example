@@ -1,0 +1,58 @@
+---
+
+#Launch Reference Network from Cloudformation Templates
+
+# Tear down any dependent objects 
+- include: deployment-cleanup.yaml
+  delegate_to: localhost
+
+
+- name: Store Paramaters 
+  template: src="{{ cft_parameters_template_name }}" dest="{{ install_path }}/state_cache/{{ deploymentName }}/net-cft-params.yaml"
+  delegate_to: localhost
+  when: cft_state == "present"
+
+# - name: debug_params
+#   debug: msg="{{ lookup('template', cft_parameters_template_name ) | from_yaml }}"
+
+- name: Launching Network from CFT
+  delegate_to: localhost
+  cloudformation:
+    state: "{{ cft_state }}"
+    stack_name: "{{deploymentName}}-network"
+    region: "{{ aws_region }}"
+    template: "{{ install_path }}/roles/net_aws_cft/files/{{ cft_file_name }}"
+    template_parameters: "{{ lookup('template', cft_parameters_template_name ) | from_yaml }}"
+    tags: 
+      Name: "{{deploymentName}}-network"
+      deployment: "{{ deploymentName }}"
+
+  register: deploy_net_stack_results
+  when: cft_state == "present"
+
+# Persist data to disk for use across plays
+- name: Persist variable data
+  copy: content="{{ deploy_net_stack_results | to_yaml }}" dest="{{ install_path }}/state_cache/{{ deploymentName }}/net-cft-output.yaml"
+  when: cft_state == "present"
+
+
+- name: Tearing Down Network from CFT
+  delegate_to: localhost
+  cloudformation:
+    state: "{{ cft_state }}"
+    stack_name: "{{deploymentName}}-network"
+    region: "{{ aws_region }}"
+    template: "{{ install_path }}/roles/net_aws_cft/files/{{ cft_file_name }}"
+    template_parameters: "{{ lookup('template', cft_parameters_template_name ) | from_yaml }}"
+    tags: 
+      Name: "{{deploymentName}}-network"
+      deployment: "{{ deploymentName }}"
+  register: teardown_net_stack_results
+  when: cft_state == "absent"
+
+# Persist data to disk for use across plays
+- name: Persist variable data
+  copy: content="{{ teardown_net_stack_results | to_yaml }}" dest="{{ install_path }}/state_cache/{{ deploymentName }}/net-cft-output.yaml"
+  when: cft_state == "absent"
+
+#- copy: content="{{ net_stack_results['stack_outputs'] | to_json }}" dest="{{ install_path }}/state_cache/{{ deploymentName }}/net-cft-output.json"

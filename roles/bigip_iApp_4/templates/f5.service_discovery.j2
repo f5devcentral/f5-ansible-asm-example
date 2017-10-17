@@ -1,0 +1,101 @@
+{
+  "name": "pm-demo-sd",
+  "partition": "Common",
+  "inheritedDevicegroup": "true",
+  "inheritedTrafficGroup": "true",
+  "strictUpdates": "enabled",
+  "template": "/Common/f5.service_discovery",
+  "templateModified": "no",
+    "variables": [
+        {
+            "name": "basic__advanced",
+            "encrypted": "no",
+            "value": "no"
+        },
+        {
+            "name": "basic__display_help",
+            "encrypted": "no",
+            "value": "hide"
+        },
+        {
+            "name": "cloud__aws_region",
+            "encrypted": "no",
+            "value": "/#default#"
+        },
+        {
+            "name": "cloud__aws_use_role",
+            "encrypted": "no",
+            "value": "no"
+        },
+        {
+            "name": "cloud__cloud_provider",
+            "encrypted": "no",
+            "value": "aws"
+        },
+        {
+            "name": "monitor__frequency",
+            "encrypted": "no",
+            "value": "30"
+        },
+        {
+            "name": "monitor__http_method",
+            "encrypted": "no",
+            "value": "GET"
+        },
+        {
+            "name": "monitor__http_version",
+            "encrypted": "no",
+            "value": "http10"
+        },
+        {
+            "name": "monitor__monitor",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "monitor__response",
+            "encrypted": "no",
+            "value": "200"
+        },
+        {
+            "name": "monitor__uri",
+            "encrypted": "no",
+            "value": "/"
+        },
+        {
+            "name": "pool__interval",
+            "encrypted": "no",
+            "value": "15"
+        },
+        {
+            "name": "pool__member_conn_limit",
+            "encrypted": "no",
+            "value": "0"
+        },
+        {
+            "name": "pool__member_port",
+            "encrypted": "no",
+            "value": "80"
+        },
+        {
+            "name": "pool__pool_to_use",
+            "encrypted": "no",
+            "value": "/#create_new#"
+        },
+        {
+            "name": "pool__public_private",
+            "encrypted": "no",
+            "value": "private"
+        },
+        {
+            "name": "pool__tag_key",
+            "encrypted": "no",
+            "value": "{{applicationPoolTagKey}}"
+        },
+        {
+            "name": "pool__tag_value",
+            "encrypted": "no",
+            "value": "{{applicationPoolTagValue}}"
+        }
+    ]
+}

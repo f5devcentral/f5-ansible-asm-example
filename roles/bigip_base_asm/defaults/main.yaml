@@ -2,6 +2,7 @@
 
 ltm_policy_name: "ltm_policy_w_asm_policy"
 asm_policy_name: "linux-high"
+asm_policy_xml: "{{ lookup('file', 'asm-policy-' + asm_policy_name + '.xml') }}"
 asm_policy_base64: "{{ lookup('file', 'asm-policy-' + asm_policy_name + '.xml') | b64encode }}"
 
 

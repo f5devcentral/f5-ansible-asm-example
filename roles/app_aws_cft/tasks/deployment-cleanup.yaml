@@ -1,0 +1,12 @@
+# Misc Cleanup Use Case for Failed Tests
+- name: delete stacks in 'rollback_complete' from previous executions
+  shell: "python {{ install_path }}/bin/get_cfn_stack_state.py {{ aws_region }} {{ deploymentName }}-{{ service_name }}-app"
+  register: initial_cfn_state
+
+- name: Teardown previous stack if necessary
+  cloudformation:
+    stack_name="{{ deploymentName }}-{{ service_name }}-app"
+    state=absent
+    region="{{ aws_region }}"
+    template="{{ install_path }}/roles/app_aws_cft/files/{{ cft_file_name }}"
+  when: initial_cfn_state.stdout == "ROLLBACK_COMPLETE"

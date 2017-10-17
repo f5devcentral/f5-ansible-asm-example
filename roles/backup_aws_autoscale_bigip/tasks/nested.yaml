@@ -1,0 +1,4 @@
+- name: Set BIG-IP Parameters from stack output
+  set_fact:
+    s3Bucket: "{{ deploy_bigip_stack_results.stack_outputs.s3Bucket }}"
+  when: deploy_bigip_stack_results is defined

@@ -1,0 +1,31 @@
+---
+# This role creates a very simple iApp service with minimal dependencies.
+# - http virtual server
+# references.yaml creates
+# - fqdn pool
+
+- name: Install iApp Template for Virtual Service Insertion
+  bigip_iapp_template:
+    state: "present"
+    content: "{{ lookup('file', iApp_template_name + '.tmpl') }}"
+    force: yes
+  delegate_to: localhost
+
+# Deploy any dependent objects
+- include: references.yaml
+  delegate_to: localhost
+
+- name: Generate the iApp payload from a template 
+  template: src="{{ jinja_template_name }}" dest="{{ install_path }}/state_cache/{{ deploymentName }}/iApp-{{ iApp_service_name }}.json"
+  delegate_to: localhost
+
+- name: Deploy iApp Service
+  delegate_to: localhost
+  bigip_iapp_service:
+      state: "present"
+      name: "{{ iApp_service_name }}"
+      template: "{{ iApp_template_name }}"
+      parameters: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/iApp-' + iApp_service_name + '.json') }}"
+      strict_updates: "{{strict_updates}}"
+  register: result
+

@@ -1,0 +1,53 @@
+---
+deploymentName: example
+cft_state: "present"
+
+
+aws_region: "us-west-2"
+
+# if existing stack
+vpc: vpc-2bbaf34e
+# Public
+subnets: "subnet-bd441ad8,subnet-92db4dcb"
+# Private
+# subnets: "subnet-bc441ad9,subnet-90db4dc9"
+availabilityZones: "us-west-2b,us-west-2c"
+
+adminUsername: admin
+# Key Name as seen in AWS
+sshKey: YourSshKeyName
+
+# Hourly 1nic
+# imageName: "Best25Mbps"
+imageName: Best
+instanceType: m4.2xlarge
+throughput: 25Mbps
+managementGuiPort: 8443
+restrictedSrcAddress: 0.0.0.0/0
+ntpServer: 0.us.pool.ntp.org
+
+bigiqAddress: 34.213.205.155
+bigiqUsername: custom-admin
+bigiqPasswordS3Arn: arn:aws:s3:::bigiqlicense/bigiqpassword
+bigiqLicensePoolName: myRegKeyPool1
+
+bigipElasticLoadBalancer: example-elb
+notificationEmail: user@example.com
+appInternalDnsName: 
+applicationPoolTagKey: aws:autoscaling:groupName
+applicationPoolTagValue: app-tier-appAutoscaleGroup-LUBRH7UKVHLA
+
+scalingMinSize: 2
+scalingMaxSize: 3
+
+# Tags
+tag_costcenter: f5costcenter
+tag_group: f5group
+tag_owner: f5owner
+tag_application: f5app
+tag_environment: f5env
+
+
+cft_name: "f5-existing-stack-bigiq-autoscale-bigip-public-ip"
+cft_file_name: "{{ cft_name + '.template' }}"
+cft_parameters_template_name: "{{ cft_name + '-parameters.yaml' }}"

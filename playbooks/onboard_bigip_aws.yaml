@@ -1,0 +1,21 @@
+---
+# This playbook logs in via SSH and creates an admin user 
+# that will be used to make REST API calls
+
+# Uses Dynamic Inventory to discover Instance IPs
+# - hosts: bigips
+- hosts: tag_Name_BIG_IP_Autoscale_Instance__demo1[0]
+  gather_facts: False
+  environment:
+      F5_SERVER: "{{ ansible_ssh_host }}"
+      F5_USER: "{{ bigip_rest_user }}"
+      F5_PASSWORD: "{{ bigip_rest_password }}"  #Inherit from vault
+      F5_SERVER_PORT: "{{ bigip_port }}"
+      F5_VALIDATE_CERTS: "{{ validate_certs }}"
+  pre_tasks:
+    - name: Set ansible_ssh_user
+      set_fact: 
+        ansible_ssh_user: "admin"
+  roles:
+    - bigip_base_aws
+
