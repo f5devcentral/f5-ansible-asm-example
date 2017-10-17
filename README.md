@@ -49,24 +49,24 @@ See link below for more detail:
 http://boto3.readthedocs.io/en/latest/guide/configuration.html
 
 
-##Examples
+## Examples
 
-###Deploy New AWS  Stack
+### Deploy New AWS  Stack
 ```
 ansible-playbook -i inventory/hosts playbooks/deploy_aws_stack.yaml -e "deploymentName=demo1 service_name=service1"
 ```
 
-###Onboard - Create REST Username & Password
+### Onboard - Create REST Username & Password
 ```
 ansible-playbook -i inventory/ec2.py playbooks/onboard_bigip_aws.yaml -e "deploymentName=demo1"
 ```
 
-###Make a backup File and Upload to S3:
+### Make a backup File and Upload to S3:
 ```
 ansible-playbook -i inventory/ec2.py playbooks/backup_autoscale_bigip.yaml -e "deploymentName=demo1"
 ```
 
-###Deploy just an iApp Service on a BIG-IP:
+### Deploy just an iApp Service on a BIG-IP:
 *Uncomment one the bigip_iApp role you would like to deploy in playbooks/deploy_iApp.yaml. See the description in each role's tasks/main.yaml*
 
 
@@ -75,7 +75,7 @@ ansible-playbook -i inventory/ec2.py playbooks/backup_autoscale_bigip.yaml -e "d
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1"
 ```
 
-####  bigip_iApp_2 = An advanced HTTPS service with WAF, irules, policies, etc. Requires ASM + AVR to be provisioned.
+#### bigip_iApp_2 = An advanced HTTPS service with WAF, irules, policies, etc. Requires ASM + AVR to be provisioned.
 
 ```
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1 node_fqdn=www.example.com"
@@ -90,7 +90,7 @@ ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymen
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-AppElb-1373821132.us-west-2.elb.amazonaws.com asm_policy_name=linux-high"
 ```
 
-####  bigip_iApp_4 = = An HTTP service with WAF and service discovery iApp for discovering pool members by tags. AWS deployments only.
+#### bigip_iApp_4 = = An HTTP service with WAF and service discovery iApp for discovering pool members by tags. AWS deployments only.
 
 ```
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service1"
@@ -129,7 +129,7 @@ This creates another
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81"
 ```
 
-#####Teardown additional Service in AWS
+##### Teardown additional Service in AWS
 ```
 ansible-playbook -vvvv -i inventory/ec2.py playbooks/teardown_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81"
 ```
