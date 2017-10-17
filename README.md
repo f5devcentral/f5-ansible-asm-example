@@ -67,14 +67,15 @@ https://github.com/F5Networks/f5-aws-cloudformation
 ansible-playbook -i inventory/hosts playbooks/deploy_aws_stack.yaml -e "deploymentName=demo1 service_name=service1"
 ```
 
-WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-IP's API host addresses and uses the default host/group naming convention. By default, the cloudformation template will tag the instances with deploymentName. If you use a different deploymentName, you will need to change the playbooks to run on name of that group instead.
+WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-IP's API host addresses and uses the default host/group naming convention. By default, the cloudformation template will tag the instances with deploymentName. If you use a different deploymentName, you will need to create another group with those aws defaults 
 
 ex.
 ```
-cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__demo1 cp inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__<deploymentName> 
+cp -r inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__demo1 inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__<deploymentName> 
 ```
 
-and modify any playbooks to use that group name instead. 
+and modify any playbooks to use name of that group instead. 
+
 
 
 ### Onboard - Create REST Username & Password
