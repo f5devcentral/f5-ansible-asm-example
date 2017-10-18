@@ -339,7 +339,7 @@ proc handle_opt_remove_on_redeploy { name checkvalue option module } {
   return 0
 }
 
-# Check provisioning cache for whether a specified module is provisioned and at what levels
+# Check provisioning state_cache for whether a specified module is provisioned and at what levels
 # Adapted from original code including the F5 iApp TCL helper library
 # Input: $module = name of the module
 # Output: $level = integer representation of the provisioning level.  See levels array below
@@ -351,16 +351,16 @@ proc is_provisioned { module } {
     dedicated 3
   }
 
-  if { [info exists ::__provision_cache($module)] } {
-    debug [list is_provisioned cache_hit] "$module $::__provision_cache($module)" 10
-    return [expr { $levels($::__provision_cache($module)) >= 1 }]
+  if { [info exists ::__provision_state_cache($module)] } {
+    debug [list is_provisioned state_cache_hit] "$module $::__provision_state_cache($module)" 10
+    return [expr { $levels($::__provision_state_cache($module)) >= 1 }]
   } else {
-    debug [list is_provisioned cache_miss] "$module" 10
+    debug [list is_provisioned state_cache_miss] "$module" 10
     return -1
   }
 }
 
-# Load provisioning cache with module provisioning levels
+# Load provisioning state_cache with module provisioning levels
 # Adapted from original code including the F5 iApp TCL helper library
 proc load_provisioned { } {
   array set levels {
@@ -378,8 +378,8 @@ proc load_provisioned { } {
     } else {
       set modlevel none
     }
-    set ::__provision_cache($modname) $modlevel
-    debug [list load_provisioned cache_set] "$modname $modlevel" 10
+    set ::__provision_state_cache($modname) $modlevel
+    debug [list load_provisioned state_cache_set] "$modname $modlevel" 10
   }
 }
 
@@ -701,26 +701,26 @@ proc table_row_to_array { row array_ref {defaults_ref {}} {null_columns []} } {
 }
 
 # Check to see if a node object exists in the get_config.
-# Lookups are cached in ::__node_cache for re-use
+# Lookups are state_cached in ::__node_state_cache for re-use
 # Input:  string node_name = The object name to check for
 # Return: 0 = node does not exist
 #         1 = node does exist
 proc check_node_exist { node_name } {
-  if { ! [info exists ::__node_cache($node_name)] } {
+  if { ! [info exists ::__node_state_cache($node_name)] } {
     set node_status [catch {tmsh::get_config ltm node $node_name} node_status_ret]
     debug [list check_node_exist $node_name status] $node_status_ret 10
     if { [string match "*address*" $node_status_ret] } {
-      set ::__node_cache($node_name) 1
-      debug [list check_node_exist $node_name cache_set] "1" 10
+      set ::__node_state_cache($node_name) 1
+      debug [list check_node_exist $node_name state_cache_set] "1" 10
       return 1
     } else {
-      set ::__node_cache($node_name) 0
-      debug [list check_node_exist $node_name cache_set] "0" 10
+      set ::__node_state_cache($node_name) 0
+      debug [list check_node_exist $node_name state_cache_set] "0" 10
       return 0
     }
   } else {
-    debug [list check_node_exist $node_name cache_hit] $::__node_cache($node_name) 10
-    return $::__node_cache($node_name)
+    debug [list check_node_exist $node_name state_cache_hit] $::__node_state_cache($node_name) 10
+    return $::__node_state_cache($node_name)
   }
 }
 
@@ -1008,8 +1008,8 @@ array set modenames {
   4 {VMware NSX}
 }
 
-array set __provision_cache {}
-array set __node_cache {}
+array set __provision_state_cache {}
+array set __node_state_cache {}
 load_provisioned
 
 array set aso_config {}
@@ -1606,7 +1606,7 @@ foreach poolRow $pool__Pools {
       set node_cmd [format "ltm node /%s/%s address %s" $partition $memberColumn(NodeName) $memberColumn(IPAddress)]
       debug [list pools $poolIdx members $memberId named_node tmsh_create] $node_cmd 7
       tmsh::create $node_cmd
-      set __node_cache($memberColumn(NodeName)) 1
+      set __node_state_cache($memberColumn(NodeName)) 1
       set node_exist 1
       set memberColumn(IPAddress) [format "/Common/%s" $memberColumn(NodeName)]
     }
@@ -1909,7 +1909,7 @@ foreach l7p_actionGroup $l7p_actionGroups {
                         set l7p_controls("asm") 1
                         set l7p_asmrule($l7p_actionGroup) 1
                       }
-      cache*          { set l7p_controls("cache") 1 }
+      state_cache*          { set l7p_controls("state_cache") 1 }
       *compress*      { set l7p_controls("compression") 1 }
       forward*        { set l7p_controls("forwarding") 1 }
       http*           { set l7p_controls("forwarding") 1 }
@@ -4311,10 +4311,10 @@ section l7policy {
 		editchoice Target display "xlarge" {
 			"asm/request/enable/policy",
 			"asm/request/disable",
-			"cache/request/enable/pin",
-			"cache/request/disable",
-			"cache/response/enable/pin",
-			"cache/respones/disable",
+			"state_cache/request/enable/pin",
+			"state_cache/request/disable",
+			"state_cache/response/enable/pin",
+			"state_cache/respones/disable",
 			"compress/request/enable",
 			"compress/request/disable",
 			"compress/response/enable",

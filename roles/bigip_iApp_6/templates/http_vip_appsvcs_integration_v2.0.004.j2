@@ -200,7 +200,7 @@
         {
             "encrypted": "no",
             "name": "pool__port",
-            "value": "80"
+            "value": "{{vip_port}}"
         },
         {
             "encrypted": "no",
@@ -220,7 +220,7 @@
         {
             "encrypted": "no",
             "name": "vs__Name",
-            "value": "www_demo_f5example_com_vs"
+            "value": "{{ service_name }}"
         },
         {
             "encrypted": "no",
@@ -281,6 +281,27 @@
             "name": "vs__AdvOptions",
             "encrypted": "no",
             "value": "translate-address=enabled"
+        },
+        {
+            "name": "vs__ProfileRequestLogging",
+            "encrypted": "no",
+            "value": "/Common/request-log"
+        },
+        {
+            "name": "vs__ProfileSecurityLogProfiles",
+            "encrypted": "no",
+            "value": "/{{partition}}/{{logging_profile_name}}"
+        },
+        {
+            "name": "vs__AdvProfiles",
+            "encrypted": "no",
+            "value": "websecurity"
+        },
+        {
+            "name": "vs__AdvPolicies",
+            "encrypted": "no",
+            "value": "{{ service_name }}_ltm_policy"
         }
+
     ]
 }

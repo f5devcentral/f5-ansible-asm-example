@@ -105,14 +105,14 @@ ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymen
 ```
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 ```
 
 #### bigip_iApp_3 = An HTTP service with WAF and fqdn pool
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com asm_policy_name=linux-low"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com asm_policy_name=linux-low"
 
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com asm_policy_name=linux-high"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com asm_policy_name=linux-high"
 ```
 
 #### bigip_iApp_4 = = An HTTP service with WAF and service discovery iApp for discovering pool members by tags. AWS deployments only.
@@ -122,10 +122,14 @@ ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymen
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 applicationPoolTagKey=aws:autoscaling:groupName applicationPoolTagValue=demo1-demo1-application-appAutoscaleGroup-1WL86R38ZV303"
 ```
 
-#### bigip_iApp_5 = A simple HTTP service using Services iApp:
+#### bigip_iApp_5 = A simple HTTP service using Services iApp
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=internal-demo1-demo1-AppElb-444305832.us-west-2.elb.amazonaws.com"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 ```
+
+#### bigip_iApp_6 = An advanced HTTP service with WAF adn fqdn pool using Services iApp
+```
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 
 
 ### Deploy Second Service on port 81:

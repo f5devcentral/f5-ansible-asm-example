@@ -6,6 +6,7 @@ service_name: "www_demo_f5example_com"
 partition: "Common"
 strict_updates: false
 
+
 vip_address: "0.0.0.0"
 vip_port: "80"
 
@@ -13,17 +14,18 @@ vip_port: "80"
 #client_ssl_cert_name: "{{ service_name }}"
 client_ssl_cert_name: "default"
 
-# ltm_policy_name: "{{ service_name }}_ltm_policy" 
-asm_policy_url: "https://s3.amazonaws.com/f5-downloads/dev/linux-high.xml"
+ltm_policy_name: "{{ service_name }}_ltm_policy"
+asm_policy_name: "linux-high"
+asm_policy_base64: "{{ lookup('file', 'asm-policy-' + asm_policy_name + '.xml') | b64encode }}"
 
-# logging_profile_name: "asm_log_to_splunk"
-# analytics_profile_name: "my_analytics_profile"
-# AnalyticsServerIP: "172.16.11.34"
-# AnalyticsServerPort: "515"
+logging_profile_name: "asm_log_to_splunk"
+analytics_profile_name: "my_analytics_profile"
+AnalyticsServerIP: "172.16.11.34"
+AnalyticsServerPort: "515"
 
 # DNS Pool Vars
-# node_fqdn: "internal.elb.com"
 node_fqdn: "www.example.com"
+
 
 # iApp Specific variables
 iApp_service_name: "{{ service_name }}"
@@ -31,8 +33,7 @@ iApp_service_name: "{{ service_name }}"
 iApp_template_name: "appsvcs_integration_v2.0.004"
 # iApp_template_name: "appsvcs_integration_v2.1dev_001"
 # TEMPLATE TYPE
-# iApp_template_type: "http_vip"
-iApp_template_type: "http_vip_w_waf"
-# iApp_template_type: "https_vip_w_waf"
+iApp_template_type: "http_vip"
+# iApp_template_type: "https_vip"
 
 jinja_template_name: "{{ iApp_template_type + '_' + iApp_template_name + '.j2' }}"

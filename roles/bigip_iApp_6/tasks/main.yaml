@@ -1,6 +1,10 @@
 ---
-
-# NOTE: This only works in versions < v13.
+# This role creates an advanced iApp service
+# - http virtual server
+# references.yaml creates
+# - fqdn pool
+# - LTM policy 
+# - WAF policy
 
 - name: Install iApp Template for Virtual Service Insertion
   delegate_to: localhost
@@ -10,8 +14,8 @@
     force: yes
 
 # Deploy any dependent objects
-# - include: references.yaml
-#   delegate_to: localhost
+- include: references.yaml
+  delegate_to: localhost
 
 # Generate the iApp we will deploy from a template 
 - name: Modify iApp Payload to interpolate variables

@@ -1,18 +1,18 @@
 {
     "kind": "tm:sys:application:service:servicestate",
-    "name": "www_demo_f5example_com",
+    "name": "service2",
     "partition": "Common",
-    "subPath": "www_demo_f5example_com.app",
-    "fullPath": "/Common/www_demo_f5example_com.app/www_demo_f5example_com",
-    "generation": 2229,
-    "selfLink": "https://localhost/mgmt/tm/sys/application/service/~Common~www_demo_f5example_com.app~www_demo_f5example_com?ver=13.0.0",
-    "description": "Deployed by appsvcs_integration_v2.0.004 in Standalone mode on 10/05/17 06:16:07",
+    "subPath": "service2.app",
+    "fullPath": "/Common/service2.app/service2",
+    "generation": 1863,
+    "selfLink": "https://localhost/mgmt/tm/sys/application/service/~Common~service2.app~service2?ver=13.0.0",
+    "description": "Deployed by appsvcs_integration_v2.0.004 in Standalone mode on 10/18/17 21:50:58",
     "deviceGroup": "/Common/autoscale-group",
     "deviceGroupReference": {
         "link": "https://localhost/mgmt/tm/cm/device-group/~Common~autoscale-group?ver=13.0.0"
     },
     "inheritedDevicegroup": "true",
-    "inheritedTrafficGroup": "false",
+    "inheritedTrafficGroup": "true",
     "strictUpdates": "disabled",
     "template": "/Common/appsvcs_integration_v2.0.004",
     "templateReference": {
@@ -105,8 +105,8 @@
                     "row": [
                         "0",
                         "/Common/http",
-                        "",
-                        ""
+                        "none",
+                        "none"
                     ]
                 }
             ]
@@ -127,13 +127,13 @@
                 {
                     "row": [
                         "0",
-                        "internal-pm-demo-AppElb-34873941.us-west-2.elb.amazonaws.com",
+                        "internal-demo1-demo1-AppElb-702401776.us-west-2.elb.amazonaws.com",
                         "80",
                         "0",
                         "1",
                         "0",
                         "enabled",
-                        ""
+                        "none"
                     ]
                 }
             ]
@@ -156,7 +156,7 @@
                         "",
                         "round-robin",
                         "0",
-                        ""
+                        "none"
                     ]
                 }
             ]
@@ -206,7 +206,7 @@
         {
             "name": "feature__easyL4Firewall",
             "encrypted": "no",
-            "value": "disabled"
+            "value": "auto"
         },
         {
             "name": "feature__insertXForwardedFor",
@@ -246,17 +246,17 @@
         {
             "name": "iapp__appStats",
             "encrypted": "no",
-            "value": "disabled"
+            "value": "enabled"
         },
         {
             "name": "iapp__asmDeployMode",
             "encrypted": "no",
-            "value": "preserve-bypass"
+            "value": "redeploy-block"
         },
         {
             "name": "iapp__logLevel",
             "encrypted": "no",
-            "value": "7"
+            "value": "5"
         },
         {
             "name": "iapp__mode",
@@ -295,7 +295,8 @@
         },
         {
             "name": "pool__MemberDefaultPort",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "80"
         },
         {
             "name": "pool__addr",
@@ -310,7 +311,7 @@
         {
             "name": "pool__port",
             "encrypted": "no",
-            "value": "80"
+            "value": "81"
         },
         {
             "name": "vs__AdvOptions",
@@ -319,11 +320,13 @@
         },
         {
             "name": "vs__AdvPolicies",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "service2_ltm_policy"
         },
         {
             "name": "vs__AdvProfiles",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "websecurity"
         },
         {
             "name": "vs__ConnectionLimit",
@@ -332,7 +335,8 @@
         },
         {
             "name": "vs__Description",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "Standard HTTP Virtual Server"
         },
         {
             "name": "vs__IpProtocol",
@@ -345,7 +349,8 @@
         },
         {
             "name": "vs__Name",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "service2"
         },
         {
             "name": "vs__OptionConnectionMirroring",
@@ -397,7 +402,8 @@
         },
         {
             "name": "vs__ProfileCompression",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "/Common/httpcompression"
         },
         {
             "name": "vs__ProfileConnectivity",
@@ -405,7 +411,8 @@
         },
         {
             "name": "vs__ProfileDefaultPersist",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "/Common/cookie"
         },
         {
             "name": "vs__ProfileFallbackPersist",
@@ -426,7 +433,8 @@
         },
         {
             "name": "vs__ProfileRequestLogging",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "/Common/request-log"
         },
         {
             "name": "vs__ProfileSecurityDoS",
@@ -434,12 +442,12 @@
         },
         {
             "name": "vs__ProfileSecurityIPBlacklist",
-            "encrypted": "no",
-            "value": "none"
+            "encrypted": "no"
         },
         {
             "name": "vs__ProfileSecurityLogProfiles",
-            "encrypted": "no"
+            "encrypted": "no",
+            "value": "/Common/asm_log_to_splunk"
         },
         {
             "name": "vs__ProfileServerProtocol",
@@ -453,7 +461,7 @@
         {
             "name": "vs__RouteAdv",
             "encrypted": "no",
-            "value": "disabled"
+            "value": "always"
         },
         {
             "name": "vs__SNATConfig",

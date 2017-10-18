@@ -1,16 +1,5 @@
 ---
 
-
-- name: Add node by their FQDN
-  bigip_node:
-      state: "present"
-      partition: "{{partition}}"
-      fqdn: "{{ node_fqdn }}"
-      name: "{{ node_fqdn }}"
-  delegate_to: localhost
-  register: result
-
-
 - name: Building REST payload for the asm loggging profile to remote analytics server
   template: src="asm_logging_profile_payload.j2" dest="{{ install_path }}/state_cache/{{ deploymentName }}/asm_logging_profile_payload-{{ service }}.json"
   delegate_to: localhost
