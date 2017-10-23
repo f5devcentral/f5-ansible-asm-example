@@ -26,3 +26,5 @@ aws_ssh_key: "{{ vault_aws_ssh_key }}"
 aws_ssh_key_name: "{{ vault_aws_ssh_key_name }}"
 aws_region: "{{ vault_aws_region }}"
 
+
+notificationEmail: "{{vault_notificationEmail}}"

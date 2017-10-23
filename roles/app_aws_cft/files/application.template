@@ -166,7 +166,7 @@
               [
                 "#cloud-config",
                 "runcmd:",
-                " - sudo docker run --name demo -p 80:80 -d f5devcentral/f5-demo-app:blue"
+                " - sudo docker run --name demo -p 80:80 -d f5devcentral/f5-demo-app:latest"
               ]
             ]
           }

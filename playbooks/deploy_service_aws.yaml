@@ -58,15 +58,18 @@
       set_fact:
           applicationPoolTagValue: "{{ app_stack['stack_outputs']['appAutoscaleGroupName'] }}"
   roles:
-    # If using defaults, deploy one role at a time as they all default to same ip:port.
     # Deploy http iApp basic
     # - bigip_iApp_1
-    # Deploy http iApp Advanced (waf, irules, logging profiles, etc. ASM, AVR Modules Required)
+    # Deploy http iApp Advanced (waf, iRules, logging profiles, etc. ASM, AVR Modules Required)
     # - bigip_iApp_2
     # Deploy http iApp with WAF and FQDN Pool
     # - bigip_iApp_3
     # Deploy http iApp with WAF and Service Discovery
     - bigip_iApp_4
+    # Deploy iAppServices iApp basic
+    # - bigip_iApp_5
+    # Deploy iAppServices iApp with WAF and FQDN Pool
+    # - bigip_iApp_6
   post_tasks:
     - name: Save the running BIG-IP configuration to disk
       delegate_to: localhost

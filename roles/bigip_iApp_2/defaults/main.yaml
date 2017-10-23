@@ -8,7 +8,7 @@ strict_updates: false
 
 # Dicatates iApp Payload from template
 deployment_type: "lb_and_waf"
-deploy_analytics: "true"
+deploy_analytics: "false"
 
 # Vip
 vip_address: "0.0.0.0/0"

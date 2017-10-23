@@ -34,11 +34,11 @@
     # Deploy http iApp with WAF and FQDN Pool
     # - bigip_iApp_3
     # Deploy http iApp with WAF and Service Discovery
-    # - bigip_iApp_4
+    - bigip_iApp_4
     # Deploy iAppServices iApp basic
     # - bigip_iApp_5
     # Deploy iAppServices iApp with WAF and FQDN Pool
-    - bigip_iApp_6
+    # - bigip_iApp_6
   post_tasks:
     - name: Save the running BIG-IP configuration to disk
       delegate_to: localhost

@@ -1398,7 +1398,7 @@
   }, 
   "bigipSecurityGroup": {
    "Properties": {
-    "GroupDescription": "Enable SSH access via port 22 and enable access to virtual servers on 80 and 443", 
+    "GroupDescription": "Enable SSH access via port 22 and enable access to virtual services", 
     "SecurityGroupIngress": [
      {
       "CidrIp": {
@@ -1412,7 +1412,7 @@
       "CidrIp": "0.0.0.0/0", 
       "FromPort": "80", 
       "IpProtocol": "tcp", 
-      "ToPort": "80"
+      "ToPort": "90"
      }, 
      {
       "CidrIp": "0.0.0.0/0", 

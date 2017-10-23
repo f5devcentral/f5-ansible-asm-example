@@ -36,7 +36,16 @@ See included requirements.txt for full environment used.
 Edit install_path, passwords, ssh keys, email, etc.
 
 
-2) update ansible.cfg in top directory to point to latest F5 ansible modules. For instance, the entry "/home/vagrant/git/f5-ansible/library/" in library path: 
+
+Edit inventory/hosts to point to your interpreter
+
+```
+localhost ansible_python_interpreter=/home/vagrant/ansible-venv/bin/python
+```
+
+2) update ansible.cfg in top directory to point to latest F5 ansible modules. 
+
+For instance, the entry "/home/vagrant/git/f5-ansible/library/" in library path: 
 
 ```
 library=/home/vagrant/git/f5-ansible/library/:./library
@@ -45,7 +54,7 @@ library=/home/vagrant/git/f5-ansible/library/:./library
 points to local copy of https://github.com/f5networks/f5-ansible development branch.
 
 
-Tested with Commit: 4e4a9c94f9ba2d311236509e5dedb27fb1691212
+Tested with Commit: ed363ac08381fb0d8eb79bde9188bb4b98ba3640
 
 
 3) If deploying stacks in AWS, configure boto credentials file ~/.aws/credentials

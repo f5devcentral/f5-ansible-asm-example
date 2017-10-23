@@ -41,7 +41,8 @@ cert_expire: 3650
 provision:
     - module: ltm
       level: nominal
-
+    - module: asm
+      level: nominal
 # mcpd:
 #    audit: "enable"
 #    loglevel: "notice"

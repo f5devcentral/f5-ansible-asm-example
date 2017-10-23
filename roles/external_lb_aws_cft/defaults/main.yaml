@@ -5,7 +5,7 @@ cft_state: "present"
 # because used in creating object names which have small limits
 deploymentName: example
 service_name: service1
-poolPort: "80"
+vip_port: "80"
 
 
 aws_region: "us-west-2"

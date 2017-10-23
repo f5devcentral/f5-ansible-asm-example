@@ -1,8 +1,7 @@
 ---
-# This role creates an advanced iApp service
+# This role creates an advanced iApp service with WAF and fqdn pool
 # - http virtual server
 # references.yaml creates
-# - fqdn pool
 # - LTM policy 
 # - WAF policy
 
