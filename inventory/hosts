@@ -2,13 +2,10 @@
 
 localhost ansible_python_interpreter=/home/vagrant/ansible-venv/bin/python
 
-[bigips]
 bigip
 
-[tag_Name_BIG_IP_Autoscale_Instance__demo1]
-
-[bigips:children]
-tag_Name_BIG_IP_Autoscale_Instance__demo1
+[bigips]
+bigip
 
 [analyticshosts]
 analytics.example.com

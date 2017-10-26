@@ -1,0 +1,12 @@
+
+# Import any variables if nested 
+- include: nested.yaml
+  delegate_to: localhost
+
+- name: Tag Instance with Scale-In protection as master
+  delegate_to: localhost
+  shell: "python {{ role_path }}/files/tag-master.py --region {{aws_region}} --autoscale_group {{bigipAutoscaleGroup}}"
+  register: result
+  until: result.rc == 0
+  retries: 60
+  delay: 30

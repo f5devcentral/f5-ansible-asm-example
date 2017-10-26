@@ -1,0 +1,16 @@
+---
+# This playbook will tag a the instance with Scale In protection as master
+# This functionality will probably be incorporated into CFT solution instead.
+
+- hosts: localhost
+  gather_facts: False
+  pre_tasks:
+    - name: Grab outputs from CFT deploy
+      set_fact:
+          bigip_stack: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/bigip-cft-output.yaml') | from_yaml }}"
+    - name: Set some variables from stack outputs
+      set_fact:
+          bigipAutoscaleGroup: "{{ bigip_stack['stack_outputs']['bigipAutoscaleGroup'] }}"
+  roles:
+    - bigip_tag_master
+

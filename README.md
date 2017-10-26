@@ -29,13 +29,13 @@ See included requirements.txt for full environment used.
 
 ## Environment Setup
 
-1) Copy and Edit vault.yaml 
+1) Copy and Edit Inventory Variables 
  
 >cp example-vault.yaml inventory/group_vars/all/vault.yaml 
 
 Edit install_path, passwords, ssh keys, email, etc.
 
-
+Edit any non secret variables in inventory/group_vars/all/vars.yaml
 
 Edit inventory/hosts to point to your interpreter
 
@@ -54,7 +54,9 @@ library=/home/vagrant/git/f5-ansible/library/:./library
 points to local copy of https://github.com/f5networks/f5-ansible development branch.
 
 
-Tested with Commit: ed363ac08381fb0d8eb79bde9188bb4b98ba3640
+Tested with Commit: 
+4462bdb96babcd484c0784212c9e4fa2845c378d 
+(Wed Oct 25 16:33:26 2017 -0700)
 
 
 3) If deploying stacks in AWS, configure boto credentials file ~/.aws/credentials
@@ -76,15 +78,21 @@ https://github.com/F5Networks/f5-aws-cloudformation
 ansible-playbook -i inventory/hosts playbooks/deploy_aws_stack.yaml -e "deploymentName=demo1 service_name=demo1"
 ```
 
-WARNING: from now on, the playbooks will use dynamic inventory to discover BIG-IP's API host addresses and uses the default host/group naming convention. By default, the cloudformation template will tag the instances with deploymentName. If you use a different deploymentName, you will need to create another group based on the new tag.
+### Tag Instance as master
 
-ex.
 ```
-cp -r inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__demo1 inventory/group_vars/tag_Name_BIG_IP_Autoscale_Instance__<deploymentName> 
+ansible-playbook -i inventory/hosts playbooks/tag_master_bigip_aws.yaml -e "deploymentName=demo1"
 ```
 
-and modify any playbooks to use name of that group instead. 
+WARNING: from now on, the playbooks will use dynamic inventory to discover the BIG-IP's API address and uses the default naming convention. By default, the cloudformation template will tag the instances with the convention
 
+Name:   BIG-IP Autoscale Instance <deploymentName>
+
+We use this playbook to add "-master" to that tag so Ansible's dynamic inventory will create dynamic group with name:
+
+tag_Name_BIG_IP_Autoscale_Instance__{{deploymentName}}_master
+
+which only contains the host IP of the instance with "Scale-In Protection". This is the most reliable host to automate against as it doesn't have a risk of being terminated mid transaction.
 
 
 ### Onboard - Create REST Username & Password

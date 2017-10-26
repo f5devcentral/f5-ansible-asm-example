@@ -3,7 +3,7 @@
 
 # Uses Dynamic Inventory to discover Instance IPs
 # - hosts: bigips
-- hosts: tag_Name_BIG_IP_Autoscale_Instance__demo1[0]
+- hosts: tag_Name_BIG_IP_Autoscale_Instance__{{deploymentName}}_master
   connection: local
   gather_facts: False
   environment:

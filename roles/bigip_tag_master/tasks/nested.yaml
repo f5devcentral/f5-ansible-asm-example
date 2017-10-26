@@ -1,0 +1,4 @@
+- name: Set bigipAutoscaleGroup if deployed as a nested stack with bigip stack
+  set_fact:
+    bigipAutoscaleGroup: "{{ deploy_bigip_stack_results.stack_outputs.bigipAutoscaleGroup }}"
+  when: deploy_bigip_stack_results is defined
