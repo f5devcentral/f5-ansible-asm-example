@@ -23,23 +23,6 @@
             ]
         },
         {
-            "name": "pool__members",
-            "columnNames": [
-                "addr",
-                "port",
-                "connection_limit"
-            ],
-            "rows": [
-                {
-                    "row": [
-                        "/{{partition}}/{{node_fqdn}}",
-                        "80",
-                        "0"
-                    ]
-                }
-            ]
-        },        
-        {
             "name": "server_pools__servers"
         }
     ],
@@ -136,7 +119,7 @@
         {
             "name": "pool__pool_to_use",
             "encrypted": "no",
-            "value": "/#create_new#"
+            "value": "{{application_poolName}}"
         },
         {
             "encrypted": "no",
@@ -175,8 +158,8 @@
         },
         {
             "encrypted": "no",
-            "name": "ssl__cert",
-            "value": "/{{partition}}/{{client_ssl_cert_name}}.crt"
+            "name": "ssl__mode",
+            "value": "client_ssl"
         },
         {
             "encrypted": "no",
@@ -185,13 +168,13 @@
         },
         {
             "encrypted": "no",
-            "name": "ssl__key",
-            "value": "/{{partition}}/{{client_ssl_cert_name}}.key"
+            "name": "ssl__cert",
+            "value": "/Common/{{client_ssl_cert_name}}.crt"
         },
         {
             "encrypted": "no",
-            "name": "ssl__mode",
-            "value": "client_ssl"
+            "name": "ssl__key",
+            "value": "/Common/{{client_ssl_cert_name}}.key"
         },
         {
             "encrypted": "no",
@@ -211,7 +194,7 @@
         {
             "encrypted": "no",
             "name": "stats__request_logging",
-            "value": "/{{partition}}/request-log"
+            "value": "/Common/request-log"
         }
     ]
 }

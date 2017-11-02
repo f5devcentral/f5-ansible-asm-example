@@ -30,9 +30,7 @@ class BigipConfig(object):
     self.password = module.params["password"]
     self.state = module.params["state"]
     self.name = module.params["name"]
-
-    #Need to parameterize partition
-    self.partition = "Common"
+    self.partition = module.params["partition"]
 
     # use a file which includes the payload contents if 
     #  one was provided
@@ -140,7 +138,7 @@ class BigipConfig(object):
     if items is not None:
       for i in items:
         if self.resource_key in i:
-          if i[self.resource_key] == self.payload[self.resource_key]: 
+          if i[self.resource_key] == self.payload[self.resource_key] and i['partition'] == self.payload['partition']:
              exists = True
              self.set_selfLink(i)
              self.set_fullPath(i)
@@ -241,6 +239,7 @@ def main():
       host=dict(required=True, default=None, type="str"),
       port=dict(required=False, default="443", type="str"),
       password=dict(required=True, default=None, type="str"),
+      partition=dict(required=False, default="Common", type="str"),
       collection_path=dict(required=False, default=None, type="str"),
       # specific to state=present
       payload=dict(required=False, default=None, type="str"),

@@ -19,8 +19,9 @@
   delegate_to: localhost
   bigip_iapp_service:
       state: "present"
+      partition: "{{partition}}"
       name: "{{ iApp_service_name }}"
-      template: "{{ iApp_template_name }}"
+      template: "/Common/{{ iApp_template_name }}"
       parameters: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/iApp-' + iApp_service_name + '.json') }}"
       strict_updates: "{{ strict_updates }}"
   register: result

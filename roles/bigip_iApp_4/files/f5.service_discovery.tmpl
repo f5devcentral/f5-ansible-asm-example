@@ -88,8 +88,8 @@ sys application template /Common/f5.service_discovery {
                                 puts "Downloading $url"
                                 exec curl -s -o $download_path $url
 
-                                puts "Verifying $download_path"
-                                verify_hash $download_path
+                                #puts "Verifying $download_path"
+                                #verify_hash $download_path
 
                                 puts "Installing $download_path"
                                 if { [string match *.rpm $file_name] } {
@@ -129,6 +129,9 @@ sys application template /Common/f5.service_discovery {
                 set NO_ANSWER "no"
                 set CREATE_NEW_ANSWER "/#create_new#"
                 set DEFAULT_ANSWER "/#default#"
+
+                set pwd [tmsh::pwd]
+                scan $pwd {/%[^/]/%s} partition folder
 
                 set app $tmsh::app_name
                 set advanced [expr { [iapp::is ::basic__advanced $YES_ANSWER] }]
@@ -175,7 +178,7 @@ sys application template /Common/f5.service_discovery {
 
                 set new_pool [iapp::is ::pool__pool_to_use "/#create_new#"]
                 if { $new_pool } {
-                    set pool_name ${app}.app/${app}_pool
+                    set pool_name /${partition}/${app}.app/${app}_pool
                 }
                 else {
                     set pool_name $::pool__pool_to_use
@@ -210,7 +213,7 @@ sys application template /Common/f5.service_discovery {
 
                 set common_script_map "
                     <CLOUD>             $::cloud__cloud_provider
-                    <APP_NAME>          ${app}.app/${app}
+                    <APP_NAME>          /${partition}/${app}.app/${app}
                     <POOL_TO_USE>       $pool_name
                     <MEMBER_PORT>       $::pool__member_port
                     <CONNECTION_LIMIT>  $::pool__member_conn_limit
@@ -498,7 +501,7 @@ sys application template /Common/f5.service_discovery {
         }
     }
     description none
-    ignore-verification false
+    ignore-verification true
     requires-bigip-version-max none
     requires-bigip-version-min 12.1.0
     requires-modules { ltm }

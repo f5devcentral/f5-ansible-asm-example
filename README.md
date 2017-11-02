@@ -17,10 +17,13 @@ to using ansible.
 Software:
 
 - ansible==2.4.0 
-- f5-sdk==3.0.3
 - boto==2.46.1
 - boto3==1.4.4
 - botocore==1.5.30
+
+
+Latest development branch of the F5 SDK:
+pip install --upgrade git+https://github.com/F5Networks/f5-common-python.git
 
 
 See included requirements.txt for full environment used.
@@ -55,8 +58,8 @@ points to local copy of https://github.com/f5networks/f5-ansible development bra
 
 
 Tested with Commit: 
-4462bdb96babcd484c0784212c9e4fa2845c378d 
-(Wed Oct 25 16:33:26 2017 -0700)
+dae5eef29de36995b780766155f6bee2379785f6
+(Wed Nov 1 14:36:13 2017 -0700)
 
 
 3) If deploying stacks in AWS, configure boto credentials file ~/.aws/credentials
@@ -167,6 +170,13 @@ ansible-playbook -v -i inventory/ec2.py playbooks/deploy_service_aws.yaml -e "de
 ##### Teardown additional Service in AWS
 ```
 ansible-playbook -vvvv -i inventory/ec2.py playbooks/teardown_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81"
+```
+
+###
+
+Test WAF:
+```
+curl -H "Content-Type: application/json; ls /usr/bin" http://35.167.82.48/
 ```
 
 

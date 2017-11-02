@@ -7,6 +7,7 @@
 - name: Install iApp Template for Virtual Service Insertion
   bigip_iapp_template:
     state: "present"
+    partition: "Common"
     content: "{{ lookup('file', iApp_template_name + '.tmpl') }}"
     force: yes
   delegate_to: localhost
@@ -24,7 +25,8 @@
   bigip_iapp_service:
       state: "present"
       name: "{{ iApp_service_name }}"
-      template: "{{ iApp_template_name }}"
+      partition: "{{ partition }}"
+      template: "/Common/{{ iApp_template_name }}"
       parameters: "{{ lookup('file', install_path + '/state_cache/' + deploymentName + '/iApp-' + iApp_service_name + '.json') }}"
       strict_updates: "{{strict_updates}}"
   register: result
