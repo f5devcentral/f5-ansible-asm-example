@@ -895,6 +895,7 @@
                       "  else\n",                      
                       "    echo 'SELF-SELECTED as Master ... Initiated Autoscale Cluster ... Loading default config'\n",
                       "    tmsh modify cm device-group autoscale-group asm-sync enabled\n",
+                      "    tmsh modify cm device-group autoscale-group save-on-auto-sync true\n",
                       "    tmsh load sys application template /config/cloud/f5.http.v1.2.0rc7.tmpl\n",
                       "    tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\n",
                       "    source /config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForBigip.sh;wait-for-bigip\n",

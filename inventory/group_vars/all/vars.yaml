@@ -35,3 +35,5 @@ aws_region: "{{ vault_aws_region }}"
 
 
 notificationEmail: "{{vault_notificationEmail}}"
+zoneId: "{{vault_zoneId}}"
+record: "{{vault_record}}"
