@@ -1,6 +1,6 @@
 deploymentName: "{{deploymentName}}"
 serviceName: "{{service_name}}"
-poolPort: "{{vip_port}}"
+poolPort: "{{vs_port}}"
 vpc: "{{vpc}}"
 subnets: "{{subnets}}"
 restrictedSrcAddress: "{{restrictedSrcAddress}}"

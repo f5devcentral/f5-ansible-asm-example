@@ -7,8 +7,8 @@ partition: "Common"
 strict_updates: false
 
 
-vip_address: "0.0.0.0"
-vip_port: "80"
+vs_address: "0.0.0.0"
+vs_port: "80"
 
 
 # DNS Pool Vars

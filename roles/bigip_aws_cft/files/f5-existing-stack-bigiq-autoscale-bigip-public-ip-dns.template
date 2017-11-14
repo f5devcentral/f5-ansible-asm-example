@@ -431,12 +431,12 @@
    "Default": "3", 
    "Description": "Maximum number of BIG-IP instances (2-8) that can be created in the Auto Scale Group", 
    "MaxValue": "8", 
-   "MinValue": "2", 
+   "MinValue": "1", 
    "Type": "Number"
   }, 
   "scalingMinSize": {
    "ConstraintDescription": "Must be a number between 1-8", 
-   "Default": "1", 
+   "Default": "2", 
    "Description": "Minimum number of BIG-IP instances (1-8) you want available in the Auto Scale Group", 
    "MaxValue": "8", 
    "MinValue": "1", 
@@ -891,6 +891,8 @@
            "# Generated from v2.5.0\n", 
            "date\n", 
            ". /config/cloud/aws/onboard_config_vars\n", 
+           "### 13.1.0 change\n ###\n", 
+           "chmod 644 /shared/vadc/aws/iid-document\n",
            "echo \"applicationPoolTagKey=$applicationPoolTagKey\" \n", 
            "echo \"applicationPoolTagValue=$applicationPoolTagValue\" \n", 
            "BIGIP_ASG_NAME=`f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/node_modules/f5-cloud-libs-aws/scripts/getAutoscaleGroupName.js` \n", 
@@ -1354,7 +1356,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "pme-lambda", 
-     "S3Key": "dns-controller.zip"
+     "S3Key": "dns-controller_v0.0.1.zip"
     }, 
     "Environment": {
      "Variables": {
@@ -1364,7 +1366,11 @@
       }, 
       "zone_id": {
        "Ref": "zoneId"
-      }
+      },
+      "vs_port": {
+       "Ref": "virtualServicePort"
+      },
+      "vs_monitor": "HTTPS"
      }
     }, 
     "Handler": "lambda_dns_controller.lambda_handler", 
@@ -1423,7 +1429,12 @@
          "Action": [
           "ec2:DescribeInstances", 
           "autoscaling:CompleteLifecycleAction", 
-          "autoscaling:DescribeAutoScalingGroups", 
+          "autoscaling:DescribeAutoScalingGroups",
+          "route53:CreateHealthCheck",
+          "route53:DeleteHealthCheck",
+          "route53:ListHealthChecks",
+          "route53:GetHealthCheck",
+          "route53:ChangeTagsForResource", 
           "xray:PutTraceSegments", 
           "xray:PutTelemetryRecords"
          ], 

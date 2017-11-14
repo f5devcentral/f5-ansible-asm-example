@@ -3,11 +3,11 @@
 - include: nested.yaml
   delegate_to: localhost
 
-# - name: Download a new UCS
-#   bigip_ucs_fetch:
-#       src: "cs_backup.ucs"
-#       dest: "{{ install_path }}/state_cache/{{ deploymentName }}/{{ ansible_ssh_host }}-backup.ucs"
-#   delegate_to: localhost
+- name: Download a new UCS
+  bigip_ucs_fetch:
+      src: "cs_backup.ucs"
+      dest: "{{ install_path }}/state_cache/{{ deploymentName }}/{{ ansible_ssh_host }}-backup.ucs"
+  delegate_to: localhost
 
 - name: Upload UCS to S3 bucket
   delegate_to: localhost

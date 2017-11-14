@@ -902,6 +902,8 @@
            "# Generated from v2.5.0\n", 
            "date\n", 
            ". /config/cloud/aws/onboard_config_vars\n", 
+           "### 13.1.0 change\n ###", 
+           "chmod 644 /shared/vadc/aws/iid-document\n",
            "echo \"applicationPoolTagKey=$applicationPoolTagKey\" \n", 
            "echo \"applicationPoolTagValue=$applicationPoolTagValue\" \n", 
            "BIGIP_ASG_NAME=`f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/node_modules/f5-cloud-libs-aws/scripts/getAutoscaleGroupName.js` \n", 

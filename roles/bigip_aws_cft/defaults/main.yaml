@@ -37,7 +37,7 @@ appInternalDnsName:
 applicationPoolTagKey: aws:autoscaling:groupName
 applicationPoolTagValue: app-tier-appAutoscaleGroup-LUBRH7UKVHLA
 
-vip_port: "80"
+vs_port: "80"
 zoneId: XXXXXXXX
 record: waf.aws.demo.f5example.com
 scalingMinSize: 2

@@ -11,8 +11,8 @@ deployment_type: "lb_and_waf"
 deploy_analytics: "false"
 
 # Vip
-vip_address: "0.0.0.0/0"
-vip_port: "80"
+vs_address: "0.0.0.0/0"
+vs_port: "80"
 
 ## SSL CERT 
 client_ssl_cert_name: "{{ service_name }}"

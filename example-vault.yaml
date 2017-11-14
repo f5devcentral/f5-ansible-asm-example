@@ -33,6 +33,9 @@ vault_aws_region: "us-west-2"
 # MISC Template Vars
 vault_on_prem_network: "10.0.0.0/24"
 vault_notificationEmail: "user@example.com"
+vault_zoneId: "Z2123123123"
+vault_record: "www.example.com"
+
 
 analytics_addr: "analytics.demo.example.com"
 vault_analytics_key: "XXXXX-XXXXX-XXXXXX-XXXXX-XXXXXXX" 

@@ -149,12 +149,12 @@ ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymen
 ### Deploy Second Service on port 81:
 
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81 asm_policy_name=linux-low"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service2 vs_port=81 asm_policy_name=linux-low"
 ```
 
 ##### Update the ASM policy:
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81 asm_policy_name=linux-high"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=service2 vs_port=81 asm_policy_name=linux-high"
 ```
 
 
@@ -164,12 +164,12 @@ This creates another
  - iApp Service
  - Application in an Auto Scale Group
 ```
-ansible-playbook -v -i inventory/ec2.py playbooks/deploy_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81"
+ansible-playbook -v -i inventory/ec2.py playbooks/deploy_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vs_port=81"
 ```
 
 ##### Teardown additional Service in AWS
 ```
-ansible-playbook -vvvv -i inventory/ec2.py playbooks/teardown_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vip_port=81"
+ansible-playbook -vvvv -i inventory/ec2.py playbooks/teardown_service_aws.yaml -e "deploymentName=demo1 service_name=service2 vs_port=81"
 ```
 
 ###

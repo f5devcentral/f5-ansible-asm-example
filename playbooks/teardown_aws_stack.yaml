@@ -10,9 +10,9 @@
           cft_state: "absent"
   roles:
     - bigip_aws_cft
-    - external_lb_aws_cft
-    - app_aws_cft
-    - net_aws_cft
+    # - external_lb_aws_cft
+    # - app_aws_cft
+    # - net_aws_cft
 
 
 
