@@ -58,8 +58,8 @@ points to local copy of https://github.com/f5networks/f5-ansible development bra
 
 
 Tested with Commit: 
-dae5eef29de36995b780766155f6bee2379785f6
-(Wed Nov 1 14:36:13 2017 -0700)
+6c2aeaabef33d795c03db7ecdd9b5e82eca91296
+(Wed Dec 20 14:56:44 2017 -0800)
 
 
 3) If deploying stacks in AWS, configure boto credentials file ~/.aws/credentials
@@ -141,7 +141,7 @@ ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymen
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 ```
 
-#### bigip_iApp_6 = An advanced HTTP service with WAF adn fqdn pool using Services iApp
+#### bigip_iApp_6 = An advanced HTTP service with WAF and fqdn member using Services iApp
 ```
 ansible-playbook -v -i inventory/ec2.py playbooks/deploy_iApp.yaml -e "deploymentName=demo1 service_name=demo1 node_fqdn=www.example.com"
 ```
