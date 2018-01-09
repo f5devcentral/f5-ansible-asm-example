@@ -33,15 +33,34 @@ bigiqLicensePoolName: myRegKeyPool1
 
 bigipElasticLoadBalancer: example-elb
 notificationEmail: user@example.com
+# vs_port: "80" # only if DAG = ELB
+# if DNS LB
+vs_port: "443"
 appInternalDnsName: 
 applicationPoolTagKey: aws:autoscaling:groupName
 applicationPoolTagValue: app-tier-appAutoscaleGroup-LUBRH7UKVHLA
 
-vs_port: "80"
-zoneId: XXXXXXXX
-record: waf.aws.demo.f5example.com
+
 scalingMinSize: 2
 scalingMaxSize: 3
+
+### DNS Provider ###
+# Route 53
+zoneId: XXXXXXXX
+record: waf.aws.demo.f5example.com
+# BIG-IP DNS (GTM)
+bigipDnsApiAddr: XXXXXXXX
+bigipDnsApiPort: "8443" 
+bigipDnsUsername: "custom-admin"
+bigipDnsPassword: XXXXXXXX
+bigipDnsPartition: "Common"
+
+bigipDnsDatacenter: "AWS-WEST-2"
+bigipDnsGenericHost: "gh_aws_us_west_2_auto"
+
+bigipDnsVirtualServiceMonitor: "tcp"
+bigipDnsPoolName: "autoscale_pool_aws_us_west_2"
+bigipDnsPoolMonitor: "demo-app-https"
 
 # Tags
 tag_costcenter: f5costcenter
@@ -51,6 +70,6 @@ tag_application: f5app
 tag_environment: f5env
 
 
-cft_name: "f5-existing-stack-bigiq-autoscale-bigip-public-ip"
+cft_name: "f5-existing-stack-bigiq-autoscale-bigip-public-ip-bigipdns"
 cft_file_name: "{{ cft_name + '.template' }}"
 cft_parameters_template_name: "{{ cft_name + '-parameters.yaml' }}"

@@ -69,7 +69,7 @@
     "Good": "ami-7d6a4c1d"
    }, 
    "us-west-2": {
-    "Best": "ami-52aa002a", 
+    "Best": "ami-67d90b1f",
     "Better": "ami-e3be2583", 
     "Good": "ami-fdb3289d"
    }
@@ -94,8 +94,7 @@
       "vpc", 
       "availabilityZones", 
       "subnets", 
-      "restrictedSrcAddress", 
-      "bigipElasticLoadBalancer"
+      "restrictedSrcAddress"
      ]
     }, 
     {
@@ -124,8 +123,7 @@
       "scalingMinSize", 
       "scalingMaxSize", 
       "scaleDownBytesThreshold", 
-      "scaleUpBytesThreshold", 
-      "notificationEmail"
+      "scaleUpBytesThreshold"
      ]
     }, 
     {
@@ -140,7 +138,16 @@
       "applicationPoolTagValue", 
       "policyLevel"
      ]
-    }, 
+    },
+    {
+     "Label": {
+      "default": "DNS CONFIGURATION"
+     }, 
+     "Parameters": [
+      "zoneId", 
+      "record"
+     ]
+    },  
     {
      "Label": {
       "default": "TAGS"
@@ -176,9 +183,6 @@
     "availabilityZones": {
      "default": "Availability Zone(s)"
     }, 
-    "bigipElasticLoadBalancer": {
-     "default": "Elastic Load Balancer for BIG-IP VEs"
-    }, 
     "costcenter": {
      "default": "Cost Center"
     }, 
@@ -200,9 +204,6 @@
     "managementGuiPort": {
      "default": "Management Port"
     }, 
-    "notificationEmail": {
-     "default": "Notification Email"
-    }, 
     "ntpServer": {
      "default": "NTP Server"
     }, 
@@ -211,6 +212,9 @@
     }, 
     "policyLevel": {
      "default": "Web Application Firewall Policy Level"
+    }, 
+    "record": {
+     "default": "Record to update"
     }, 
     "restrictedSrcAddress": {
      "default": "Restricted Source Address"
@@ -241,6 +245,9 @@
     }, 
     "vpc": {
      "default": "VPC ID"
+    }, 
+    "zoneId": {
+     "default": "Route 53 Zone ID"
     }
    }
   }, 
@@ -299,11 +306,6 @@
   "availabilityZones": {
    "Description": "Availability Zones where you want to deploy BIG-IP VEs (we recommend at least 2)", 
    "Type": "List<AWS::EC2::AvailabilityZone::Name>"
-  }, 
-  "bigipElasticLoadBalancer": {
-   "Default": "ExampleBigipELB", 
-   "Description": "Name of the AWS Elastic Load Balancer for the BIG-IP VEs", 
-   "Type": "String"
   }, 
   "bigiqAddress": {
    "ConstraintDescription": "Verify IP address of the BIG-IQ device that contains the pool of licenses", 
@@ -388,12 +390,6 @@
    "Description": "Port for the BIG-IP management Configuration utility", 
    "Type": "Number"
   }, 
-  "notificationEmail": {
-   "AllowedPattern": ".+@.+", 
-   "ConstraintDescription": "Must be a valid email address.", 
-   "Description": "Valid email address to send Auto Scaling event notifications", 
-   "Type": "String"
-  }, 
   "ntpServer": {
    "Default": "0.pool.ntp.org", 
    "Description": "NTP server for this implementation", 
@@ -413,6 +409,10 @@
    "ConstraintDescription": "Select the WAF Policy Level you want to use", 
    "Default": "high", 
    "Description": "WAF Policy Level you want to use to protect the applications", 
+   "Type": "String"
+  }, 
+  "record": {
+   "Description": "String for A record to update. ex. www.example.com", 
    "Type": "String"
   }, 
   "restrictedSrcAddress": {
@@ -438,12 +438,12 @@
    "Default": "3", 
    "Description": "Maximum number of BIG-IP instances (2-8) that can be created in the Auto Scale Group", 
    "MaxValue": "8", 
-   "MinValue": "2", 
+   "MinValue": "1", 
    "Type": "Number"
   }, 
   "scalingMinSize": {
    "ConstraintDescription": "Must be a number between 1-8", 
-   "Default": "1", 
+   "Default": "2", 
    "Description": "Minimum number of BIG-IP instances (1-8) you want available in the Auto Scale Group", 
    "MaxValue": "8", 
    "MinValue": "1", 
@@ -473,6 +473,10 @@
   "vpc": {
    "Description": "VPC where you want to deploy the BIG-IP VEs", 
    "Type": "AWS::EC2::VPC::Id"
+  }, 
+  "zoneId": {
+   "Description": "Zone Id", 
+   "Type": "String"
   }
  }, 
  "Resources": {
@@ -571,9 +575,6 @@
           "ec2:DisassociateAddress", 
           "ec2:DescribeNetworkInterfaces", 
           "ec2:DescribeNetworkInterfaceAttributes", 
-          "ec2:DescribeRouteTables", 
-          "ec2:ReplaceRoute", 
-          "ec2:assignprivateipaddresses", 
           "sts:AssumeRole", 
           "cloudwatch:PutMetricData"
          ], 
@@ -613,11 +614,6 @@
     "LaunchConfigurationName": {
      "Ref": "BigipLaunchConfig"
     }, 
-    "LoadBalancerNames": [
-     {
-      "Ref": "bigipElasticLoadBalancer"
-     }
-    ], 
     "MaxSize": {
      "Ref": "scalingMaxSize"
     }, 
@@ -703,7 +699,7 @@
     "AutoScalingRollingUpdate": {
      "MaxBatchSize": "1", 
      "MinInstancesInService": "1", 
-     "PauseTime": "PT30M"
+     "PauseTime": "PT10M"
     }
    }
   }, 
@@ -870,7 +866,7 @@
         "group": "root", 
         "mode": "000644", 
         "owner": "root", 
-        "source": "http://cdn.f5.com/product/blackbox/aws/asm-policy-linux.tar.gz"
+        "source": "https://s3-us-west-2.amazonaws.com/pme-lambda/asm-policy-linux.tar.gz"
        }, 
        "/config/cloud/aws/createUser.sh": {
         "content": {
@@ -902,7 +898,7 @@
            "# Generated from v2.5.0\n", 
            "date\n", 
            ". /config/cloud/aws/onboard_config_vars\n", 
-           "### 13.1.0 change\n ###", 
+           "### 13.1.0 change\n ###\n", 
            "chmod 644 /shared/vadc/aws/iid-document\n",
            "echo \"applicationPoolTagKey=$applicationPoolTagKey\" \n", 
            "echo \"applicationPoolTagValue=$applicationPoolTagValue\" \n", 
@@ -930,14 +926,15 @@
            "    echo \"UCS backup loaded from backup folder in S3 bucket ${s3Bucket}.\"\n", 
            "  else\n", 
            "    echo 'SELF-SELECTED as Master ... Initiated Autoscale Cluster ... Loading default config'\n", 
-           "    tmsh modify cm device-group autoscale-group asm-sync enabled\n",
+           "    tmsh modify cm device-group autoscale-group asm-sync enabled\n", 
            "    tmsh modify cm device-group autoscale-group save-on-auto-sync true\n",
            "    tmsh save /sys config\n", 
            "    tmsh load sys application template /config/cloud/f5.http.v1.2.0rc7.tmpl\n", 
            "    tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\n", 
            "    source /config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForBigip.sh;wait-for-bigip\n", 
            "    ### START CUSTOM CONFIGURTION:  Policy Name/Policy URL, etc. \n", 
-           "    tmsh load asm policy file /config/cloud/asm-policy-linux-${policyLevel}.xml\n", 
+           "    tmsh create ltm profile client-ssl example-clientssl-profile cert default.crt key default.key\n",
+           "    tmsh load asm policy file /config/cloud/asm-policy-linux-${policyLevel}.xml\n",
            "    # modify asm policy names below (ex. /Common/linux-${policyLevel}) to match policy name in the xml file\n", 
            "    tmsh modify asm policy /Common/linux-${policyLevel} active\n", 
            "    tmsh create ltm policy app-ltm-policy strategy first-match legacy\n", 
@@ -949,11 +946,11 @@
            "    if [ \"${applicationPoolTagKey}\" != \"default\" ]\n", 
            "    then\n", 
            "        tmsh create ltm pool ${deploymentName} { monitor http }\n", 
-           "        tmsh create sys application service ${deploymentName} { device-group autoscale-group template f5.http.v1.2.0rc7 lists add { asm__security_logging { value { \"${local_asm_log_name}\" } } } tables add { pool__members { column-names { addr port connection_limit } rows {{ row { ${deploymentName} ${applicationPort} 0 }}}}} variables add { pool__pool_to_use { value /Common/${deploymentName} } asm__use_asm { value app-ltm-policy } pool__addr { value 0.0.0.0 } pool__mask { value 0.0.0.0 } pool__port { value ${virtualServicePort} } monitor__http_version { value http11 } }}\n", 
+           "        tmsh create sys application service ${deploymentName} { device-group autoscale-group template f5.http.v1.2.0rc7 lists add { asm__security_logging { value { \"${local_asm_log_name}\" } } } tables add { pool__hosts { column-names { name } rows { { row { ${deploymentName} } } } }  pool__members { column-names { addr port connection_limit } rows {{ row { ${deploymentName} ${applicationPort} 0 }}}}} variables add { pool__pool_to_use { value /Common/${deploymentName} } pool__addr { value 0.0.0.0 } pool__mask { value 0.0.0.0 } pool__port { value ${virtualServicePort} } net__vlan_mode { value all } monitor__http_version { value http11 } ssl__client_ssl_profile { value /Common/example-clientssl-profile } ssl__mode { value client_ssl } ssl_encryption_questions__advanced { value yes } pool__port_secure { value 443 } pool__redirect_to_https { value yes } pool__redirect_port { value 80 }  asm__use_asm { value /Common/app-ltm-policy }  asm__language { value utf-8 }  }}\n", 
            "        tmsh create sys application service ${deploymentName}_sd { template f5.service_discovery variables add { cloud__aws_use_role { value no } cloud__cloud_provider { value aws } cloud__aws_region { value ${region} } pool__interval { value 15 } pool__lb_method_choice { value least-connections-member } pool__member_conn_limit { value 0 } pool__pool_to_use { value /Common/${deploymentName} } pool__member_port { value ${applicationPort} } pool__public_private { value private } pool__tag_key { value ${applicationPoolTagKey} } pool__tag_value { value ${applicationPoolTagValue} } }}\n", 
            "    else\n", 
            "        tmsh create ltm node ${deploymentName} fqdn { name ${appInternalDnsName} }\n", 
-           "        tmsh create sys application service ${deploymentName} { device-group autoscale-group template f5.http.v1.2.0rc7 tables add { pool__members { column-names { addr port connection_limit } rows {{ row { ${deploymentName} ${applicationPort} 0 }}}}} variables add { asm__use_asm { value app-ltm-policy } pool__addr { value 0.0.0.0 } pool__mask { value 0.0.0.0 } pool__port { value ${virtualServicePort} } monitor__http_version { value http11 } }}\n", 
+           "        tmsh create sys application service ${deploymentName} { device-group autoscale-group template f5.http.v1.2.0rc7 lists add { asm__security_logging { value { \"${local_asm_log_name}\" } } } tables add { pool__hosts { column-names { name } rows { { row { ${deploymentName} } } } }  pool__members { column-names { addr port connection_limit } rows {{ row { ${deploymentName} ${applicationPort} 0 }}}} } variables add {  pool__addr { value 0.0.0.0 } pool__mask { value 0.0.0.0 } pool__port { value ${virtualServicePort} } net__vlan_mode { value all } monitor__http_version { value http11 } ssl__client_ssl_profile { value /Common/example-clientssl-profile } ssl__mode { value client_ssl } ssl_encryption_questions__advanced { value yes } pool__port_secure { value 443 } asm__use_asm { value /Common/app-ltm-policy }  asm__language { value utf-8 } pool__redirect_to_https { value yes } pool__redirect_port { value 80 }  }}\n", 
            "    fi\n", 
            "    ### END CUSTOM CONFIGURATION\n", 
            "    tmsh save /sys config\n", 
@@ -1226,23 +1223,7 @@
            "    echo mcpd not ready yet", 
            "    let checks=checks+1", 
            "    sleep 10", 
-           "done", 
-           "#echo loading verifyHash script", 
-           "#if ! tmsh load sys config merge file /config/verifyHash; then", 
-           "#    echo cannot validate signature of /config/verifyHash", 
-           "#    exit", 
-           "#fi", 
-           "#echo loaded verifyHash", 
-           "#declare -a filesToVerify=(\"/config/cloud/f5-cloud-libs.tar.gz\" \"/config/cloud/f5-cloud-libs-aws.tar.gz\" \"/config/cloud/aws/f5.service_discovery.tmpl\")", 
-           "#for fileToVerify in \"${filesToVerify[@]}\"", 
-           "#do", 
-           "#    echo verifying \"$fileToVerify\"", 
-           "#    if ! tmsh run cli script verifyHash \"$fileToVerify\"; then", 
-           "#       echo \"$fileToVerify\" is not valid", 
-           "#        exit 1", 
-           "#    fi", 
-           "#    echo verified \"$fileToVerify\"", 
-           "#done", 
+           "done",
            "mkdir -p /config/cloud/aws/node_modules", 
            "echo expanding f5-cloud-libs.tar.gz", 
            "tar xvfz /config/cloud/f5-cloud-libs.tar.gz -C /config/cloud/aws/node_modules", 
@@ -1269,7 +1250,7 @@
     }
    }, 
    "Properties": {
-    "AssociatePublicIpAddress": true,    
+    "AssociatePublicIpAddress": true, 
     "BlockDeviceMappings": [
      {
       "DeviceName": "/dev/xvda", 
@@ -1378,6 +1359,138 @@
    }, 
    "Type": "AWS::AutoScaling::ScalingPolicy"
   }, 
+  "LambdaDNSController": {
+   "Properties": {
+    "Code": {
+     "S3Bucket": "pme-lambda", 
+     "S3Key": "dns-controller_v0.0.1.zip"
+    }, 
+    "Environment": {
+     "Variables": {
+      "member_type": "public", 
+      "record": {
+       "Ref": "record"
+      }, 
+      "zone_id": {
+       "Ref": "zoneId"
+      },
+      "vs_port": {
+       "Ref": "virtualServicePort"
+      },
+      "vs_monitor": "HTTPS"
+     }
+    }, 
+    "Handler": "lambda_dns_controller.lambda_handler", 
+    "MemorySize": "1536", 
+    "Role": {
+     "Fn::GetAtt": [
+      "LamdaAccessRole", 
+      "Arn"
+     ]
+    }, 
+    "Runtime": "python2.7", 
+    "Timeout": "300"
+   }, 
+   "Type": "AWS::Lambda::Function"
+  }, 
+  "LambdaInvokePermission": {
+   "Properties": {
+    "Action": "lambda:InvokeFunction", 
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdaDNSController", 
+      "Arn"
+     ]
+    }, 
+    "Principal": "sns.amazonaws.com", 
+    "SourceArn": {
+     "Ref": "SNSTopic"
+    }
+   }, 
+   "Type": "AWS::Lambda::Permission"
+  }, 
+  "LamdaAccessRole": {
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sts:AssumeRole"
+       ], 
+       "Effect": "Allow", 
+       "Principal": {
+        "Service": [
+         "lambda.amazonaws.com"
+        ]
+       }
+      }
+     ], 
+     "Version": "2012-10-17"
+    }, 
+    "Path": "/", 
+    "Policies": [
+     {
+      "PolicyDocument": {
+       "Statement": [
+        {
+         "Action": [
+          "ec2:DescribeInstances", 
+          "autoscaling:CompleteLifecycleAction", 
+          "autoscaling:DescribeAutoScalingGroups",
+          "route53:CreateHealthCheck",
+          "route53:DeleteHealthCheck",
+          "route53:ListHealthChecks",
+          "route53:GetHealthCheck",
+          "route53:ChangeTagsForResource", 
+          "xray:PutTraceSegments", 
+          "xray:PutTelemetryRecords"
+         ], 
+         "Effect": "Allow", 
+         "Resource": "*"
+        }, 
+        {
+         "Action": [
+          "logs:CreateLogGroup", 
+          "logs:CreateLogStream", 
+          "logs:PutLogEvents"
+         ], 
+         "Effect": "Allow", 
+         "Resource": "arn:aws:logs:*:*:*"
+        }, 
+        {
+         "Action": [
+          "route53:ChangeResourceRecordSets", 
+          "route53:ListResourceRecordSets"
+         ], 
+         "Effect": "Allow", 
+         "Resource": {
+          "Fn::Join": [
+           "", 
+           [
+            "arn:aws:route53:::hostedzone/", 
+            {
+             "Ref": "zoneId"
+            }
+           ]
+          ]
+         }
+        }, 
+        {
+         "Action": [
+          "route53:ListHostedZones"
+         ], 
+         "Effect": "Allow", 
+         "Resource": "*"
+        }
+       ], 
+       "Version": "2012-10-17"
+      }, 
+      "PolicyName": "LamdaAcccessPolicy"
+     }
+    ]
+   }, 
+   "Type": "AWS::IAM::Role"
+  }, 
   "S3Bucket": {
    "Properties": {
     "AccessControl": "BucketOwnerFullControl"
@@ -1389,9 +1502,12 @@
     "Subscription": [
      {
       "Endpoint": {
-       "Ref": "notificationEmail"
+       "Fn::GetAtt": [
+        "LambdaDNSController", 
+        "Arn"
+       ]
       }, 
-      "Protocol": "email"
+      "Protocol": "lambda"
      }
     ]
    }, 
@@ -1425,7 +1541,7 @@
       "CidrIp": "0.0.0.0/0", 
       "FromPort": "443", 
       "IpProtocol": "tcp", 
-      "ToPort": "443"
+      "ToPort": "453"
      }, 
      {
       "CidrIp": {

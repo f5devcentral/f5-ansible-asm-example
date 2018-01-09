@@ -5,7 +5,7 @@ cft_state: "present"
 # because used in creating object names which have small limits
 deploymentName: example
 service_name: service1
-
+containerName: "f5devcentral/f5-demo-app:AWS"
 
 aws_region: us-west-2
 # if existing stack

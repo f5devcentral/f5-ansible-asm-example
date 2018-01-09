@@ -5,5 +5,5 @@ applicationSubnets: "{{applicationSubnets}}"
 instanceType: "{{appInstanceType}}"
 sshKey: "{{sshKey}}"
 restrictedSrcAddress: "{{restrictedSrcAddress}}"
-
+containerName: "{{containerName}}"
 

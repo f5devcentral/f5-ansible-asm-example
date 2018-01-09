@@ -28,10 +28,10 @@
   template: src="asm_logging_profile_payload.j2" dest="{{ install_path }}/state_cache/{{ deploymentName }}/asm_logging_profile_payload-{{ service }}.json"
   delegate_to: localhost
 
-- name: Deploying/updating ASM Logging Profile to send to Remote Analytics Server
+- name: Deploying updating ASM Logging Profile to send to Remote Analytics Server
   delegate_to: localhost
   bigip_rest_wrapper:
-      state=present
+      state="present"
       host={{ ansible_ssh_host }}
       port={{ bigip_port }}
       user={{ bigip_user }}

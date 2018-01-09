@@ -1146,7 +1146,7 @@
         "group": "root", 
         "mode": "000644", 
         "owner": "root", 
-        "source": "https://raw.githubusercontent.com/F5Networks/f5-cloud-libs/v3.4.1/dist/f5-cloud-libs.tar.gz"
+        "source": "https://raw.githubusercontent.com/F5Networks/f5-cloud-libs/v3.5.2/dist/f5-cloud-libs.tar.gz"
        }, 
        "/config/cloud/f5.http.v1.2.0rc7.tmpl": {
         "group": "root", 

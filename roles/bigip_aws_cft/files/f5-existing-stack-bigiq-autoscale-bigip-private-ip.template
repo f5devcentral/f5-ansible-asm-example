@@ -773,18 +773,18 @@
                 "owner": "root",
                 "group": "root"
               },
-              "/config/cloud/f5-cloud-libs.tar.gz": {
-                "source": "https://raw.githubusercontent.com/F5Networks/f5-cloud-libs/v3.4.1/dist/f5-cloud-libs.tar.gz",
-                "mode": "000644",
-                "owner": "root",
-                "group": "root"
-              },
-              "/config/cloud/f5-cloud-libs-aws.tar.gz": {
-                "source": "https://raw.githubusercontent.com/F5Networks/f5-cloud-libs-aws/v1.5.0/dist/f5-cloud-libs-aws.tar.gz",
-                "mode": "000644",
-                "owner": "root",
-                "group": "root"
-              },
+             "/config/cloud/f5-cloud-libs-aws.tar.gz": {
+              "group": "root", 
+              "mode": "000644", 
+              "owner": "root", 
+              "source": "https://raw.githubusercontent.com/F5Networks/f5-cloud-libs-aws/v1.5.0/dist/f5-cloud-libs-aws.tar.gz"
+             }, 
+             "/config/cloud/f5-cloud-libs.tar.gz": {
+              "group": "root", 
+              "mode": "000644", 
+              "owner": "root", 
+              "source": "https://raw.githubusercontent.com/F5Networks/f5-cloud-libs/v3.5.2/dist/f5-cloud-libs.tar.gz"
+             }, 
               "/config/cloud/aws/f5.service_discovery.tmpl": {
               "group": "root",
               "mode": "000644",

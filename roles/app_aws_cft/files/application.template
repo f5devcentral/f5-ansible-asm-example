@@ -49,6 +49,11 @@
       "Default": "0.0.0.0/0",
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "containerName" : {
+      "Description" : "Container Name",
+      "Type" : "String",
+      "Default": "f5devcentral/f5-demo-app:latest"
     }
   },
   "Mappings": {
@@ -162,11 +167,15 @@
         "UserData": {
           "Fn::Base64": {
             "Fn::Join": [
-              "\n",
+              "",
               [
-                "#cloud-config",
-                "runcmd:",
-                " - sudo docker run --name demo -p 80:80 -d f5devcentral/f5-demo-app:latest"
+                "#cloud-config\n",
+                "runcmd:\n",
+                " - sudo docker run --name demo -p 80:80 -d ",
+                {
+                  "Ref": "containerName"
+                },
+                "\n"
               ]
             ]
           }
@@ -200,6 +209,13 @@
             "Key": "Application",
             "Value": {
               "Ref": "serviceName"
+            },
+            "PropagateAtLaunch": true
+          },
+          {
+            "Key": "containerName",
+            "Value": {
+              "Ref": "containerName"
             },
             "PropagateAtLaunch": true
           }

@@ -23,6 +23,11 @@ vault_bigip_password: "StrongPasswordHere"
 vault_bigip_rest_user: "restadmin"
 vault_bigip_rest_password: "StrongPasswordHere"
 
+# BIG-IP DNS Provider (GTM)
+vault_bigip_dns_username: "admin"
+vault_bigip_dns_password: "StrongPasswordHere"
+vault_bigip_dns_api_port: "443" 
+vault_bigip_dns_api_addr: "1.1.1.1"
 
 # AWS Creds:
 vault_aws_ssh_key: "~/.ssh/YOUR-KEY.pem"
