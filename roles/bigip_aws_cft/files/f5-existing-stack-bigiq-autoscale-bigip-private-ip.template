@@ -447,48 +447,48 @@
   },
   "Mappings": {
     "BigipRegionMap": {
-     "ap-northeast-1": {
-      "Best": "ami-eb1d2c8c"
-     },
-     "ap-northeast-2": {
-      "Best": "ami-dcdf02b2"
-     },
-     "ap-south-1": {
-      "Best": "ami-0ed4a661"
-     },
-     "ap-southeast-1": {
-      "Best": "ami-9b08b2f8"
-     },
-     "ap-southeast-2": {
-      "Best": "ami-67d8d304"
-     },
-     "ca-central-1": {
-      "Best": "ami-42922e26"
-     },
-     "eu-central-1": {
-      "Best": "ami-c74e91a8"
-     },
-     "eu-west-1": {
-      "Best": "ami-e8a2af8e"
-     },
-     "eu-west-2": {
-      "Best": "ami-dba7b3bf"
-     },
-     "sa-east-1": {
-      "Best": "ami-7d8ee211"
-     },
-     "us-east-1": {
-      "Best": "ami-4c76185a"
-     },
-     "us-east-2": {
-      "Best": "ami-2be6c14e"
-     },
-     "us-west-1": {
-      "Best": "ami-e56d4b85"
-     },
-     "us-west-2": {
-      "Best": "ami-a4bc27c4"
-     }
+      "ap-northeast-1": {
+        "Best": "ami-da9526bc"
+      }, 
+      "ap-northeast-2": {
+        "Best": "ami-05b81f6b"
+      }, 
+      "ap-south-1": {
+        "Best": "ami-e4a5ea8b"
+      }, 
+      "ap-southeast-1": {
+        "Best": "ami-bc96c2df"
+      }, 
+      "ap-southeast-2": {
+        "Best": "ami-d501eab7"
+      }, 
+      "ca-central-1": {
+        "Best": "ami-7e9a211a"
+      }, 
+      "eu-central-1": {
+        "Best": "ami-a444c7cb"
+      }, 
+      "eu-west-1": {
+        "Best": "ami-f666d38f"
+      }, 
+      "eu-west-2": {
+        "Best": "ami-2d2c3349"
+      }, 
+      "sa-east-1": {
+        "Best": "ami-564f0a3a"
+      }, 
+      "us-east-1": {
+        "Best": "ami-12a92668"
+      }, 
+      "us-east-2": {
+        "Best": "ami-74193711"
+      }, 
+      "us-west-1": {
+        "Best": "ami-074f7767"
+      }, 
+      "us-west-2": {
+        "Best": "ami-67d90b1f"
+      }
     }
   },
   "Resources": {
