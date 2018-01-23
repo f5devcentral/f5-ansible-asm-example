@@ -43,9 +43,8 @@
       "Best": "ami-074f7767"
     }, 
     "us-west-2": {
-      "Best": "ami-67d90b1f"
+      "Best": "ami-e0c96298"
     }
-  }
  }, 
  "Metadata": {
   "AWS::CloudFormation::Interface": {

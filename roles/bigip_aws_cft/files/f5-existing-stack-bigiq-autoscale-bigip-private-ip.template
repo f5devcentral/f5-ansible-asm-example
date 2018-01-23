@@ -489,7 +489,6 @@
       "us-west-2": {
         "Best": "ami-67d90b1f"
       }
-    }
   },
   "Resources": {
     "bigipSecurityGroup": {
