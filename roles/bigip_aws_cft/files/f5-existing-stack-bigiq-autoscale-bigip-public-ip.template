@@ -2,6 +2,7 @@
  "AWSTemplateFormatVersion": "2010-09-09", 
  "Description": "WAF v2.5.0: This template deploys an auto scaling group for utility instances BIG-IP. Example scaling policies and CloudWatch alarms are associated with the auto scaling group.", 
  "Mappings": {
+  "BigipRegionMap": {
     "ap-northeast-1": {
       "Best": "ami-da9526bc"
     }, 
@@ -44,6 +45,7 @@
     "us-west-2": {
       "Best": "ami-67d90b1f"
     }
+   }
  }, 
  "Metadata": {
   "AWS::CloudFormation::Interface": {

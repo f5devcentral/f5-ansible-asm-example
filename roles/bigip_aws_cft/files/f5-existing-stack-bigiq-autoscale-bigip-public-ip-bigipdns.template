@@ -45,6 +45,7 @@
     "us-west-2": {
       "Best": "ami-e0c96298"
     }
+   }
  }, 
  "Metadata": {
   "AWS::CloudFormation::Interface": {

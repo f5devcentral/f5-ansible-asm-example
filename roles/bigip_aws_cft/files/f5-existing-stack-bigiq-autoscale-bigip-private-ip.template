@@ -489,6 +489,7 @@
       "us-west-2": {
         "Best": "ami-67d90b1f"
       }
+    }
   },
   "Resources": {
     "bigipSecurityGroup": {
@@ -861,7 +862,7 @@
                           {
                           "Ref": "bigiqLicensePoolName"
                           },
-                          " --log-level silly --output /var/log/aws-autoscale.log\n",
+                          " --log-level silly --output /var/log/aws-autoscale.log\n"
                       ]
                   ]
                 },
